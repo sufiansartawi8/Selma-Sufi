@@ -74,6 +74,63 @@ hero_img = (
 )
 
 
+# --- Her dictionary. Counts are real, from three years of messages. ---
+TALLY = {"together": 137446, "hers": 60375}
+LEXICON = [
+    ("bro",            861, "What you called me more than anything else."),
+    ("\U0001F90D",      400, "Never a red one. Not once."),
+    ("oki",            381, "Counting okii, okiii and the rest."),
+    ("yess",           203, "More s's for bigger news."),
+    ("don't worry",    196, "Said like a job you were taking on."),
+    ("I love you",     181, "Out loud, in writing, where I could keep it."),
+    ("no way",         152, "Pure unfiltered shock, every time."),
+    ("khalas",         148, "End of discussion."),
+    ("inchaallah",     134, "Hopefully. Eventually. We'll see."),
+    ("ily",            128, "When you couldn't be bothered with the whole thing."),
+    ("miss you",       110, "More often than I deserved."),
+    ("hihi",           102, "When you were pleased with yourself."),
+    ("exact",           87, "One word. Full agreement. Conversation closed."),
+    ("wallah",          83, "I swear."),
+    ("bisous",          72, "The temperature of the whole thing was in which one you picked."),
+    ("good luck",       48, "Before every interview, every match, every time."),
+    ("yallah",          46, "Let's go."),
+    ("habibi",          39, "My love."),
+    ("proud of you",    32, "About things that hadn't earned it yet."),
+    ("sabah el nour",   10, "Good morning, the proper way."),
+]
+
+# --- Three years, short. Edit freely. ---
+TIMELINE = [
+    ("Jul 2023", "Spain", "A ferry, and a lot of trouble. Worth it."),
+    ("Oct 2024", "Again", "A year and a half of nothing, then no time had passed."),
+    ("Nov 2024", "New York", "Lunch breaks, the L train, walking everywhere."),
+    ("2025", "Everywhere", "Miami, Los Angeles, Dubai, Marbella again."),
+    ("Aug 2025", "Cornell", "\u201cI'm so proud of you baby.\u201d"),
+    ("2026", "Jordan", "Wadi Rum in the rain. Petra without your passport."),
+]
+
+# --- Open when... Replace every one of these with your own words. ---
+LETTERS = [
+    ("you miss me",
+     "Then I'm missing you at the same time, which is most of the time. "
+     "Go through the hundred. I meant all of them."),
+    ("you can't sleep",
+     "Put the song on. Read one reason, not all of them. "
+     "You always fell asleep on the phone anyway."),
+    ("you're annoyed with me",
+     "You're probably right. You usually were, and I took too long to say so."),
+    ("it's been a bad day",
+     "Tell me about it properly, the long version, the way you do. "
+     "I'll still be listening."),
+    ("you forget how good you are",
+     "Read number fifty again. You knew what you deserved before I did."),
+]
+
+# --- The dog. ---
+THEO = ("Theo",
+        "Born in M\u00e1laga, flown to Amman through Istanbul, and yours from "
+        "the first photo. You still asked how he was months after everything.")
+
 # What each part of her is for. (x, y on a 400x760 canvas, name, meaning)
 PARTS = [
     (200,  60, "Your mind",      "the smartest person I have ever met"),
@@ -222,6 +279,32 @@ def figure():
             '<p class="why" id="partWhy">Every part of you is for something.</p>'
             '<div class="chips">' + say + '</div></div></div>'
             '<script type="application/json" id="partData">' + data + '</script>')
+
+
+def lexicon():
+    rows = "".join(
+        f'<li><span class="w">{html.escape(w)}</span>'
+        f'<span class="c">{n:,}</span>'
+        f'<span class="g">{html.escape(g)}</span></li>'
+        for w, n, g in LEXICON)
+    return f'''<p class="tallyline">{TALLY["together"]:,} messages between us.
+      {TALLY["hers"]:,} of them yours.</p><ul class="lex">{rows}</ul>'''
+
+
+def timeline():
+    return "".join(
+        f'<li><span class="when">{html.escape(w)}</span>'
+        f'<span class="dot"></span>'
+        f'<span class="what"><b>{html.escape(t)}</b>{html.escape(d)}</span></li>'
+        for w, t, d in TIMELINE)
+
+
+def letters():
+    return "".join(
+        f'<details class="env"><summary><span class="seal">&#9829;</span>'
+        f'Open when {html.escape(when)}</summary>'
+        f'<p>{html.escape(body)}</p></details>'
+        for when, body in LETTERS)
 
 
 TEMPLATE = r"""<!doctype html>
@@ -448,6 +531,74 @@ h1 .it{font-style:italic;display:block;color:var(--brass)}
   transition:color .16s,border-color .16s}
 .chip:hover,.chip.on{color:var(--brass);border-color:var(--brass)}
 
+/* ---- how you talk ---- */
+.lexicon{max-width:1120px;margin:0 auto;padding:0 24px clamp(44px,8vw,78px)}
+.tallyline{margin:0 0 24px;color:var(--faint);font-size:13.5px;
+  font-variant-numeric:tabular-nums;max-width:48ch}
+.lex{list-style:none;margin:0;padding:0;display:grid;gap:1px;
+  background:var(--rule);border:1px solid var(--rule);border-radius:4px;
+  overflow:hidden;grid-template-columns:1fr}
+@media (min-width:760px){.lex{grid-template-columns:1fr 1fr}}
+.lex li{background:#141211;display:grid;grid-template-columns:auto 1fr;
+  column-gap:16px;row-gap:3px;align-items:baseline;padding:15px 20px}
+.lex .w{font-family:var(--display);font-size:clamp(19px,3.6vw,25px);color:var(--ink)}
+.lex .c{font-family:var(--display);font-size:clamp(17px,3vw,21px);color:var(--brass);
+  font-variant-numeric:tabular-nums;text-align:right}
+.lex .g{grid-column:1/-1;font-size:12.5px;color:var(--faint);line-height:1.45}
+
+/* ---- three years ---- */
+.years{max-width:820px;margin:0 auto;padding:0 24px clamp(44px,8vw,78px)}
+.tl{list-style:none;margin:0;padding:0}
+.tl li{display:grid;grid-template-columns:auto 18px 1fr;align-items:start;
+  column-gap:14px;position:relative;padding-bottom:26px}
+.tl li:last-child{padding-bottom:0}
+.tl .when{font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--faint);padding-top:4px;white-space:nowrap}
+.tl .dot{width:9px;height:9px;border-radius:50%;background:var(--brass);
+  margin:6px auto 0;position:relative}
+.tl li:not(:last-child) .dot::after{content:"";position:absolute;left:50%;top:13px;
+  width:1px;height:calc(100% + 30px);background:var(--rule);transform:translateX(-50%)}
+.tl .what{min-width:0}
+.tl .what b{display:block;font-family:var(--display);font-weight:400;
+  font-size:clamp(20px,4vw,27px);margin-bottom:3px}
+.tl .what{font-size:14px;color:var(--dim);line-height:1.5}
+
+/* ---- clocks ---- */
+.clocks{display:flex;align-items:flex-end;gap:clamp(24px,6vw,54px);
+  margin-top:26px;flex-wrap:wrap}
+.clock .city{margin:0;font-size:11px;letter-spacing:.26em;text-transform:uppercase;
+  color:var(--faint)}
+.clock .now{margin:5px 0 2px;font-family:var(--display);
+  font-size:clamp(30px,6.5vw,46px);line-height:1;color:var(--brass);
+  font-variant-numeric:tabular-nums}
+.clock .zone{margin:0;font-size:12px;color:var(--faint)}
+.apartby{margin:0 0 4px;font-size:13px;color:var(--dim);font-style:italic}
+
+/* ---- open when ---- */
+.mail{max-width:820px;margin:0 auto;padding:0 24px clamp(44px,8vw,78px)}
+.envs{display:grid;gap:10px}
+.env{border:1px solid var(--rule);border-radius:4px;background:var(--raise)}
+.env summary{list-style:none;cursor:pointer;padding:17px 20px;
+  font-family:var(--display);font-size:clamp(18px,3.6vw,24px);
+  display:flex;align-items:baseline;gap:12px;transition:color .16s}
+.env summary::-webkit-details-marker{display:none}
+.env summary:hover{color:var(--brass)}
+.env .seal{color:var(--brass);font-size:14px}
+.env[open] summary{color:var(--brass);padding-bottom:4px}
+.env p{margin:0;padding:0 20px 20px 46px;font-family:var(--display);
+  font-style:italic;font-size:clamp(16px,3.2vw,20px);line-height:1.45;
+  color:var(--ink);max-width:54ch}
+
+/* ---- theo ---- */
+.theo{max-width:820px;margin:0 auto;padding:0 24px clamp(44px,8vw,78px);
+  display:flex;align-items:center;gap:clamp(18px,4vw,34px);flex-wrap:wrap}
+.pup{flex:0 0 auto;width:clamp(74px,15vw,104px)}
+.pup svg{width:100%;height:auto;display:block}
+.pupsay{flex:1 1 240px;min-width:0}
+.pupsay h2{font-family:var(--display);font-weight:400;font-style:italic;
+  font-size:clamp(24px,4.4vw,34px);margin:0 0 6px}
+.pupsay p{margin:0;color:var(--dim);font-size:14.5px;line-height:1.55;max-width:46ch}
+
 footer{border-top:1px solid var(--rule);max-width:1120px;margin:0 auto;
   padding:34px 24px calc(50px + env(safe-area-inset-bottom,0px));
   display:flex;justify-content:space-between;align-items:center;gap:16px;
@@ -557,6 +708,18 @@ __ROWS__
   </div>
 </section>
 
+<section class="lexicon">
+  <div class="atlas-top"><h2>How you talk</h2></div>
+  __LEXICON__
+</section>
+
+<section class="years">
+  <div class="atlas-top"><h2>Three years</h2></div>
+  <ol class="tl">
+__TIMELINE__
+  </ol>
+</section>
+
 <section class="parts">
   <div class="atlas-top"><h2>What you are made of</h2></div>
   __FIGURE__
@@ -572,6 +735,37 @@ __ROWS__
     <span><i style="background:#C7A75F"></i>The two of us</span>
     <span><i style="background:#7EA8B8"></i>Everywhere we went together</span>
   </p>
+  <div class="clocks">
+    <div class="clock"><p class="city">Paris</p><p class="now" id="clkParis">&mdash;</p>
+      <p class="zone" id="zParis"></p></div>
+    <div class="clock"><p class="city">Amman</p><p class="now" id="clkAmman">&mdash;</p>
+      <p class="zone" id="zAmman"></p></div>
+    <p class="apartby" id="apartBy"></p>
+  </div>
+</section>
+
+<section class="mail">
+  <div class="atlas-top"><h2>Open when&hellip;</h2></div>
+  <div class="envs">
+__LETTERS__
+  </div>
+</section>
+
+<section class="theo">
+  <div class="pup">
+    <svg viewBox="0 0 120 120" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="60" cy="74" rx="22" ry="19" fill="#C7A75F" opacity=".9"/>
+      <ellipse cx="38" cy="44" rx="11" ry="14" fill="#C7A75F" opacity=".75"
+        transform="rotate(-22 38 44)"/>
+      <ellipse cx="60" cy="36" rx="11" ry="14" fill="#C7A75F" opacity=".75"/>
+      <ellipse cx="82" cy="44" rx="11" ry="14" fill="#C7A75F" opacity=".75"
+        transform="rotate(22 82 44)"/>
+    </svg>
+  </div>
+  <div class="pupsay">
+    <h2>__THEO_NAME__</h2>
+    <p>__THEO_WHY__</p>
+  </div>
 </section>
 
 <footer>
@@ -802,6 +996,49 @@ __ROWS__
     });
   });
 
+  /* ---------- two clocks ---------- */
+  function tz(city, zone, elId, zoneId) {
+    var t = document.getElementById(elId);
+    if (!t) return null;
+    function face() {
+      try {
+        t.textContent = new Intl.DateTimeFormat('en-GB', {
+          timeZone: zone, hour: '2-digit', minute: '2-digit', hour12: false
+        }).format(new Date());
+        var z = document.getElementById(zoneId);
+        if (z) {
+          var nm = new Intl.DateTimeFormat('en-GB', {
+            timeZone: zone, timeZoneName: 'short'
+          }).formatToParts(new Date()).find(function (q) { return q.type === 'timeZoneName'; });
+          z.textContent = (nm ? nm.value : zone);
+        }
+      } catch (e) { t.textContent = '--:--'; }
+    }
+    face();
+    return face;
+  }
+  var faces = [tz('Paris', 'Europe/Paris', 'clkParis', 'zParis'),
+               tz('Amman', 'Asia/Amman', 'clkAmman', 'zAmman')].filter(Boolean);
+  if (faces.length) {
+    setInterval(function () { faces.forEach(function (f) { f(); }); }, 10000);
+    var by = document.getElementById('apartBy');
+    if (by) {
+      try {
+        var now = new Date();
+        function off(zone) {
+          var s_ = new Intl.DateTimeFormat('en-GB', {
+            timeZone: zone, hour: 'numeric', hour12: false
+          }).format(now);
+          return parseInt(s_, 10);
+        }
+        var d = off('Asia/Amman') - off('Europe/Paris');
+        if (d < -12) d += 24; if (d > 12) d -= 24;
+        by.textContent = d === 0 ? 'the same hour'
+          : Math.abs(d) + (Math.abs(d) === 1 ? ' hour apart' : ' hours apart');
+      } catch (e) {}
+    }
+  }
+
   paintLeaf(at, false);
   if (location.hash && location.hash !== '#lock') fromHash();
 })();
@@ -825,6 +1062,11 @@ out = (
     .replace("__APART__", f"{APART:,}")
     .replace("__CHART__", chart())
     .replace("__FIGURE__", figure())
+    .replace("__LEXICON__", lexicon())
+    .replace("__TIMELINE__", timeline())
+    .replace("__LETTERS__", letters())
+    .replace("__THEO_NAME__", html.escape(THEO[0]))
+    .replace("__THEO_WHY__", html.escape(THEO[1]))
     .replace("__ANSWERS__", json.dumps(ANSWERS))
     .replace("__FIRST__", html.escape(reasons[0]))
 )
