@@ -395,7 +395,9 @@ body{background:var(--bg);color:var(--ink);font-family:var(--ui);
 /* ---- the photograph, uncovered ---- */
 .plate{width:100%;background:var(--raise);cursor:pointer;position:relative;
   padding-top:env(safe-area-inset-top,0px)}
-.plate img{width:100%;height:min(66svh,660px);object-fit:cover;display:block}
+.plate img{width:100%;height:min(66svh,660px);object-fit:cover;display:block;
+  transition:opacity .26s ease}
+.plate img.swapping{opacity:.25}
 @media (max-width:620px){.plate img{height:min(54svh,460px)}}
 .tally{position:absolute;left:0;right:0;bottom:0;margin:0;
   display:flex;justify-content:space-between;align-items:baseline;
@@ -405,7 +407,8 @@ body{background:var(--bg);color:var(--ink);font-family:var(--ui);
 .tally .tap{color:var(--brass);opacity:.9}
 
 /* ---- titles ---- */
-.title{max-width:980px;margin:0 auto;padding:clamp(34px,6vw,58px) 24px clamp(10px,2vw,16px)}
+.title{max-width:1120px;margin:0 auto;
+  padding:clamp(38px,6vw,64px) 24px clamp(10px,2vw,16px)}
 .kicker{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--brass);
   margin:0 0 14px;font-weight:600}
 h1{font-family:var(--display);font-weight:400;font-size:clamp(44px,12vw,94px);
@@ -491,10 +494,10 @@ h1 .it{font-style:italic;display:block;color:var(--brass)}
   text-transform:uppercase;color:var(--faint);white-space:nowrap}
 .index details[open] summary .meta::after{content:" \2014 close"}
 .index details:not([open]) summary .meta::after{content:" \2014 open"}
-.index .panel{padding-bottom:30px}
+.index .panel-inner{padding-bottom:30px}
 
 /* ---- the song ---- */
-.tune{max-width:820px;margin:0 auto;padding:0 24px clamp(40px,7vw,64px)}
+.tune{max-width:1120px;margin:0 auto;padding:0 24px clamp(26px,4vw,38px)}
 .tune .lead{margin:0 0 16px;font-family:var(--display);font-style:italic;
   font-size:clamp(17px,3.4vw,22px);color:var(--brass)}
 .tune .frame{border:1px solid var(--rule);border-radius:4px;overflow:hidden;
@@ -517,7 +520,7 @@ h1 .it{font-style:italic;display:block;color:var(--brass)}
   text-transform:uppercase;color:var(--brass)}
 
 /* ---- the map ---- */
-.atlas{max-width:1120px;margin:0 auto;padding:0 24px clamp(46px,7.5vw,80px)}
+.atlas{max-width:none;margin:0;padding:0}
 .atlas-top{display:flex;align-items:baseline;gap:14px;margin-bottom:22px;flex-wrap:wrap;
   padding-bottom:14px;border-bottom:1px solid var(--rule)}
 .atlas-top h2{font-family:var(--display);font-weight:400;font-style:italic;
@@ -555,7 +558,7 @@ h1 .it{font-style:italic;display:block;color:var(--brass)}
   margin-right:8px;vertical-align:1px}
 
 /* ---- say something back ---- */
-.post{max-width:820px;margin:0 auto;padding:0 24px clamp(46px,7.5vw,80px)}
+.post{max-width:none;margin:0;padding:0}
 .post h2{font-family:var(--display);font-weight:400;font-style:italic;
   font-size:clamp(24px,4.4vw,34px);margin:0 0 6px;padding-bottom:14px;
   border-bottom:1px solid var(--rule)}
@@ -575,7 +578,7 @@ h1 .it{font-style:italic;display:block;color:var(--brass)}
 .postrow .said{font-size:13px;color:var(--dim)}
 
 /* ---- what you are made of ---- */
-.parts{max-width:1120px;margin:0 auto;padding:0 24px clamp(46px,7.5vw,80px)}
+.parts{max-width:none;margin:0;padding:0}
 .fig{display:flex;gap:clamp(22px,5vw,60px);align-items:center;flex-wrap:wrap;
   border:1px solid var(--rule);border-radius:4px;background:#0C0B0A;
   padding:clamp(22px,4vw,40px)}
@@ -599,7 +602,7 @@ h1 .it{font-style:italic;display:block;color:var(--brass)}
 .chip:hover,.chip.on{color:var(--brass);border-color:var(--brass)}
 
 /* ---- how you talk ---- */
-.lexicon{max-width:1120px;margin:0 auto;padding:0 24px clamp(46px,7.5vw,80px)}
+.lexicon{max-width:none;margin:0;padding:0}
 .tallyline{margin:0 0 24px;color:var(--faint);font-size:13.5px;
   font-variant-numeric:tabular-nums;max-width:48ch}
 .lex{list-style:none;margin:0;padding:0;display:grid;gap:1px;
@@ -614,7 +617,7 @@ h1 .it{font-style:italic;display:block;color:var(--brass)}
 .lex .g{grid-column:1/-1;font-size:12.5px;color:var(--faint);line-height:1.45}
 
 /* ---- three years ---- */
-.years{max-width:820px;margin:0 auto;padding:0 24px clamp(46px,7.5vw,80px)}
+.years{max-width:none;margin:0;padding:0}
 .tl{list-style:none;margin:0;padding:0}
 .tl li{display:grid;grid-template-columns:auto 18px 1fr;align-items:start;
   column-gap:14px;position:relative;padding-bottom:26px}
@@ -642,7 +645,7 @@ h1 .it{font-style:italic;display:block;color:var(--brass)}
 .apartby{margin:0 0 4px;font-size:13px;color:var(--dim);font-style:italic}
 
 /* ---- open when ---- */
-.mail{max-width:820px;margin:0 auto;padding:0 24px clamp(46px,7.5vw,80px)}
+.mail{max-width:none;margin:0;padding:0}
 .envs{display:grid;gap:10px}
 .env{border:1px solid var(--rule);border-radius:4px;background:var(--raise)}
 .env summary{list-style:none;cursor:pointer;padding:17px 20px;
@@ -657,7 +660,7 @@ h1 .it{font-style:italic;display:block;color:var(--brass)}
   color:var(--ink);max-width:54ch}
 
 /* ---- theo ---- */
-.theo{max-width:1120px;margin:0 auto;padding:0 24px clamp(46px,7.5vw,80px)}
+.theo{max-width:none;margin:0;padding:0}
 .theowrap{display:flex;align-items:center;justify-content:center;
   gap:clamp(24px,5vw,52px);flex-wrap:wrap;
   border:1px solid var(--rule);border-radius:4px;background:#0C0B0A;
@@ -672,6 +675,51 @@ h1 .it{font-style:italic;display:block;color:var(--brass)}
 .pupsay h2{font-family:var(--display);font-weight:400;font-style:italic;
   font-size:clamp(24px,4.4vw,34px);margin:0 0 6px}
 .pupsay p{margin:0;color:var(--dim);font-size:14.5px;line-height:1.55;max-width:46ch}
+
+/* ---- tabs ---- */
+.tabs{position:sticky;top:0;z-index:20;background:rgba(19,17,16,.86);
+  backdrop-filter:blur(14px) saturate(140%);
+  border-bottom:1px solid var(--rule);margin-bottom:clamp(30px,5vw,48px);
+  padding-top:env(safe-area-inset-top,0px)}
+.tabrow{position:relative;max-width:1120px;margin:0 auto;padding:0 24px;
+  display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;scroll-snap-type:x proximity}
+.tabrow::-webkit-scrollbar{display:none}
+.tab{appearance:none;background:none;border:0;cursor:pointer;flex:none;
+  font-family:var(--ui);font-size:13.5px;font-weight:500;letter-spacing:.02em;
+  color:var(--faint);padding:17px 14px 16px;white-space:nowrap;
+  scroll-snap-align:center;transition:color .22s ease}
+.tab:hover{color:var(--dim)}
+.tab[aria-selected="true"]{color:var(--brass)}
+.ink{position:absolute;bottom:0;height:2px;background:var(--brass);
+  border-radius:2px 2px 0 0;transition:transform .42s cubic-bezier(.22,.9,.26,1),
+  width .42s cubic-bezier(.22,.9,.26,1);transform-origin:left;pointer-events:none;
+  width:0;left:0}
+@media (prefers-reduced-motion:reduce){.ink{transition:none}}
+
+#stage{max-width:1120px;margin:0 auto;padding:0 24px
+  calc(60px + env(safe-area-inset-bottom,0px));position:relative}
+.panel{display:none}
+.panel.on{display:block;animation:settle .42s cubic-bezier(.22,.9,.26,1) both}
+@keyframes settle{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.panel.on{animation:none}}
+.panel > * + *{margin-top:0}
+.atlas-top.spaced{margin-top:clamp(42px,7vw,68px)}
+.panel .sub{margin:0 0 18px;color:var(--faint);font-size:13.5px;max-width:52ch}
+
+/* photos panel */
+.panel .plate{margin:0;border-radius:4px;overflow:hidden;border:1px solid var(--rule)}
+.panel .plate img{height:min(68svh,700px)}
+@media (max-width:620px){.panel .plate img{height:min(58svh,480px)}}
+.shotnav{display:flex;gap:8px;justify-content:center;margin-top:18px}
+.shotnav button{appearance:none;background:none;border:1px solid var(--rule);
+  color:var(--ink);font-size:15px;width:46px;height:46px;border-radius:50%;
+  cursor:pointer;display:grid;place-items:center;
+  transition:border-color .2s,color .2s}
+.shotnav button:hover{border-color:var(--brass);color:var(--brass)}
+
+.mapfig{margin:0;border:1px solid var(--rule);border-radius:4px;
+  overflow:hidden;background:#0C0B0A}
 
 footer{border-top:1px solid var(--rule);max-width:1120px;margin:0 auto;
   padding:34px 24px calc(50px + env(safe-area-inset-bottom,0px));
@@ -714,7 +762,7 @@ body.locked{overflow:hidden}
 </div>
 
 <div class="title">
-  <p class="kicker">For Selma</p>
+  <p class="kicker">To Slimi, from Sufi, with love</p>
   <h1>Reasons<span class="it">why I love you</span></h1>
   <p class="since" id="since"></p>
   <p class="apart" id="apart"></p>
@@ -738,74 +786,74 @@ body.locked{overflow:hidden}
   </div>
 </section>
 
-<header class="plate">
-  __HERO__
-  <p class="tally"><span id="tally"></span><span class="tap">tap for the next</span></p>
-</header>
-
-<section class="book">
-  <div class="book-top"><span class="label" id="deckLabel">Today</span><span class="line"></span></div>
-  <article class="page" id="page">
-    <div class="leaf">
-      <div class="num" id="num">1</div>
-      <p class="say" id="say">__FIRST__</p>
-    </div>
-    <p class="folio" id="folio"></p>
-  </article>
-  <div class="controls">
-    <button type="button" id="prev" aria-label="Previous page">&#8592;</button>
-    <button type="button" id="next" aria-label="Next page">&#8594;</button>
-    <button type="button" id="shuffle" class="shuffle">Surprise me</button>
-    <span class="hint">swipe, or use &#8592; &#8594;</span>
+<nav class="tabs" id="tabs" aria-label="Sections">
+  <div class="tabrow">
+    <button type="button" class="tab" data-panel="p-reasons">Reasons</button>
+    <button type="button" class="tab" data-panel="p-photos">Photos</button>
+    <button type="button" class="tab" data-panel="p-years">Us</button>
+    <button type="button" class="tab" data-panel="p-words">Your words</button>
+    <button type="button" class="tab" data-panel="p-theo">Theo</button>
+    <button type="button" class="tab" data-panel="p-say">Say something</button>
+    <span class="ink" id="ink" aria-hidden="true"></span>
   </div>
-</section>
+</nav>
 
-<section class="index">
-  <details id="allOfThem">
-    <summary><h2>All of them</h2><span class="meta">__COUNT__</span></summary>
-    <div class="panel">
-      <ol>
+<main id="stage">
+
+<div class="panel" id="p-reasons" role="tabpanel">
+  <section class="book">
+    <div class="book-top"><span class="label" id="deckLabel">Today</span><span class="line"></span></div>
+    <article class="page" id="page">
+      <div class="leaf">
+        <div class="num" id="num">1</div>
+        <p class="say" id="say">__FIRST__</p>
+      </div>
+      <p class="folio" id="folio"></p>
+    </article>
+    <div class="controls">
+      <button type="button" id="prev" aria-label="Previous page">&#8592;</button>
+      <button type="button" id="next" aria-label="Next page">&#8594;</button>
+      <button type="button" id="shuffle" class="shuffle">Surprise me</button>
+      <span class="hint">swipe, or use &#8592; &#8594;</span>
+    </div>
+  </section>
+
+  <section class="index">
+    <details id="allOfThem">
+      <summary><h2>All of them</h2><span class="meta">__COUNT__</span></summary>
+      <div class="panel-inner">
+        <ol>
 __ROWS__
-      </ol>
-    </div>
-  </details>
-</section>
+        </ol>
+      </div>
+    </details>
+  </section>
+</div>
 
-<section class="post">
-  <h2>Say something back</h2>
-  <p class="sub">Write it here, then send it to me. Nothing on this page can reach
-    me on its own.</p>
-  <textarea id="note" rows="5" placeholder="Whatever you want."></textarea>
-  <div class="postrow">
-    <button type="button" id="copyNote">Copy it</button>
-    <a id="mailNote" href="#">Open it in mail</a>
-    <span class="said" id="said" role="status"></span>
+<div class="panel" id="p-photos" role="tabpanel">
+  <figure class="plate">
+    __HERO__
+    <figcaption class="tally">
+      <span id="tally"></span><span class="tap">tap for the next</span>
+    </figcaption>
+  </figure>
+  <div class="shotnav">
+    <button type="button" id="shotPrev" aria-label="Previous photo">&#8592;</button>
+    <button type="button" id="shotNext" aria-label="Next photo">&#8594;</button>
   </div>
-</section>
+</div>
 
-<section class="lexicon">
-  <div class="atlas-top"><h2>How you talk</h2></div>
-  __LEXICON__
-</section>
-
-<section class="years">
+<div class="panel" id="p-years" role="tabpanel">
   <div class="atlas-top"><h2>Three years</h2></div>
   <ol class="tl">
 __TIMELINE__
   </ol>
-</section>
 
-<section class="parts">
-  <div class="atlas-top"><h2>What you are made of</h2></div>
-  __FIGURE__
-</section>
-
-<section class="atlas">
-  <div class="atlas-top">
+  <div class="atlas-top spaced">
     <h2>Where we are</h2>
     <div class="gap">__APART__ km<small>apart</small></div>
   </div>
-  <figure>__CHART__</figure>
+  <figure class="mapfig">__CHART__</figure>
   <p class="legend">
     <span><i style="background:#C7A75F"></i>The two of us</span>
     <span><i style="background:#7EA8B8"></i>Everywhere we went together</span>
@@ -817,37 +865,57 @@ __TIMELINE__
       <p class="zone" id="zAmman"></p></div>
     <p class="apartby" id="apartBy"></p>
   </div>
-</section>
+</div>
 
-<section class="mail">
-  <div class="atlas-top"><h2>Open when&hellip;</h2></div>
+<div class="panel" id="p-words" role="tabpanel">
+  <div class="atlas-top"><h2>How you talk</h2></div>
+  __LEXICON__
+
+  <div class="atlas-top spaced"><h2>Open when&hellip;</h2></div>
   <div class="envs">
 __LETTERS__
   </div>
-</section>
 
-<section class="theo">
+  <div class="atlas-top spaced"><h2>What you are made of</h2></div>
+  __FIGURE__
+</div>
+
+<div class="panel" id="p-theo" role="tabpanel">
   <div class="theowrap">
-  <figure class="film">
-    <video id="theoFilm" src="media/theo.mp4" poster="media/theo.jpg"
-           preload="none" playsinline controls loop></video>
-  </figure>
-  <div class="pupsay">
-    <span class="paw" aria-hidden="true">
-      <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="60" cy="76" rx="21" ry="18" fill="currentColor" opacity=".95"/>
-        <ellipse cx="39" cy="46" rx="10" ry="13" fill="currentColor" opacity=".8"
-          transform="rotate(-22 39 46)"/>
-        <ellipse cx="60" cy="38" rx="10" ry="13" fill="currentColor" opacity=".8"/>
-        <ellipse cx="81" cy="46" rx="10" ry="13" fill="currentColor" opacity=".8"
-          transform="rotate(22 81 46)"/>
-      </svg>
-    </span>
-    <h2>__THEO_NAME__</h2>
-    <p>__THEO_WHY__</p>
+    <figure class="film">
+      <video id="theoFilm" src="media/theo.mp4" poster="media/theo.jpg"
+             preload="none" playsinline controls loop></video>
+    </figure>
+    <div class="pupsay">
+      <span class="paw" aria-hidden="true">
+        <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="60" cy="76" rx="21" ry="18" fill="currentColor" opacity=".95"/>
+          <ellipse cx="39" cy="46" rx="10" ry="13" fill="currentColor" opacity=".8"
+            transform="rotate(-22 39 46)"/>
+          <ellipse cx="60" cy="38" rx="10" ry="13" fill="currentColor" opacity=".8"/>
+          <ellipse cx="81" cy="46" rx="10" ry="13" fill="currentColor" opacity=".8"
+            transform="rotate(22 81 46)"/>
+        </svg>
+      </span>
+      <h2>__THEO_NAME__</h2>
+      <p>__THEO_WHY__</p>
+    </div>
   </div>
+</div>
+
+<div class="panel" id="p-say" role="tabpanel">
+  <div class="atlas-top"><h2>Say something back</h2></div>
+  <p class="sub">Write it here, then send it to me. Nothing on this page can reach
+    me on its own.</p>
+  <textarea id="note" rows="6" placeholder="Whatever you want."></textarea>
+  <div class="postrow">
+    <button type="button" id="copyNote">Copy it</button>
+    <a id="mailNote" href="#">Open it in mail</a>
+    <span class="said" id="said" role="status"></span>
   </div>
-</section>
+</div>
+
+</main>
 
 <footer>
   <span>Still true</span>
@@ -1001,7 +1069,10 @@ __LETTERS__
   /* ---------- #47 opens on 47 ---------- */
   function fromHash() {
     var n = parseInt((location.hash || '').slice(1), 10);
-    if (n >= 1 && n <= reasons.length) paintLeaf(n - 1, true);
+    if (n >= 1 && n <= reasons.length) {
+      openPanel('p-reasons', false);
+      paintLeaf(n - 1, true);
+    }
   }
   window.addEventListener('hashchange', fromHash);
 
@@ -1011,24 +1082,57 @@ __LETTERS__
       var n = parseInt(a.getAttribute('href').slice(1), 10);
       history.replaceState(null, '', '#' + n);
       turn(n - 1, n - 1 > at ? 1 : -1, true);
-      document.querySelector('.book').scrollIntoView({ block: 'center' });
+      var det = document.getElementById('allOfThem');
+      if (det) det.open = false;
+      document.querySelector('.book').scrollIntoView({ block: 'center', behavior: 'smooth' });
     });
   });
 
-  /* ---------- tap the photograph for the next one ---------- */
+  /* ---------- photographs ---------- */
   var hero = document.getElementById('hero');
   var tally = document.getElementById('tally');
-  if (hero && photos.length > 1) {
-    var shot = Math.floor(Math.random() * photos.length);
+  var shot = 0;
+  function preloadNeighbours() {}
+  if (hero && photos.length) {
+    shot = Math.floor(Math.random() * photos.length);
+    preloadNeighbours = function () {
+      [1, -1].forEach(function (d) {
+        var k = (shot + d + photos.length) % photos.length;
+        var im = new Image(); im.src = 'photos/' + photos[k];
+      });
+    };
     function paintHero(i) {
       shot = (i + photos.length) % photos.length;
-      hero.src = 'photos/' + photos[shot];
+      hero.classList.add('swapping');
+      var loader = new Image();
+      loader.onload = loader.onerror = function () {
+        hero.src = loader.src;
+        hero.classList.remove('swapping');
+        preloadNeighbours();
+      };
+      loader.src = 'photos/' + photos[shot];
       if (tally) tally.textContent = (shot + 1) + ' / ' + photos.length;
     }
-    document.querySelector('.plate').addEventListener('click', function () {
-      paintHero(shot + 1);
-    });
-    paintHero(shot);
+    var plate = document.querySelector('.plate');
+    if (plate) plate.addEventListener('click', function () { paintHero(shot + 1); });
+    var sp = document.getElementById('shotPrev');
+    var sn = document.getElementById('shotNext');
+    if (sp) sp.addEventListener('click', function () { paintHero(shot - 1); });
+    if (sn) sn.addEventListener('click', function () { paintHero(shot + 1); });
+    var px = null;
+    if (plate) {
+      plate.addEventListener('touchstart', function (e) {
+        px = e.changedTouches[0].clientX;
+      }, { passive: true });
+      plate.addEventListener('touchend', function (e) {
+        if (px === null) return;
+        var dx = e.changedTouches[0].clientX - px;
+        if (Math.abs(dx) > 48) paintHero(shot + (dx < 0 ? 1 : -1));
+        px = null;
+      }, { passive: true });
+    }
+    hero.src = 'photos/' + photos[shot];
+    if (tally) tally.textContent = (shot + 1) + ' / ' + photos.length;
   } else if (tally) {
     tally.hidden = true;
   }
@@ -1096,6 +1200,49 @@ __LETTERS__
     });
   });
 
+  /* ---------- tabs ---------- */
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var ink = document.getElementById('ink');
+  var row = document.querySelector('.tabrow');
+  var current = null;
+
+  function slideInk(btn) {
+    if (!ink || !btn) return;
+    ink.style.width = btn.offsetWidth + 'px';
+    ink.style.transform = 'translateX(' + btn.offsetLeft + 'px)';
+  }
+
+  function openPanel(id, push) {
+    tabs.forEach(function (t) {
+      var on = t.dataset.panel === id;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      if (on) {
+        slideInk(t);
+        if (row) {
+          var want = t.offsetLeft - (row.clientWidth - t.offsetWidth) / 2;
+          row.scrollTo({ left: Math.max(0, want), behavior: 'smooth' });
+        }
+      }
+    });
+    document.querySelectorAll('.panel').forEach(function (pn) {
+      pn.classList.toggle('on', pn.id === id);
+    });
+    current = id;
+    if (push) {
+      try { history.replaceState(null, '', '#' + id.replace('p-', '')); } catch (e) {}
+    }
+    if (id === 'p-photos') { try { preloadNeighbours(); } catch (e) {} }
+  }
+
+  tabs.forEach(function (t) {
+    t.setAttribute('role', 'tab');
+    t.addEventListener('click', function () { openPanel(t.dataset.panel, true); });
+  });
+  window.addEventListener('resize', function () {
+    var on = document.querySelector('.tab[aria-selected="true"]');
+    if (on) slideInk(on);
+  });
+
   /* ---------- two clocks ---------- */
   function tz(city, zone, elId, zoneId) {
     var t = document.getElementById(elId);
@@ -1140,7 +1287,19 @@ __LETTERS__
   }
 
   paintLeaf(at, false);
-  if (location.hash && location.hash !== '#lock') fromHash();
+
+  var wanted = (location.hash || '').slice(1);
+  var known = tabs.map(function (t) { return t.dataset.panel.replace('p-', ''); });
+  if (known.indexOf(wanted) !== -1) {
+    openPanel('p-' + wanted, false);
+  } else {
+    openPanel('p-reasons', false);
+    if (location.hash && location.hash !== '#lock') fromHash();
+  }
+  requestAnimationFrame(function () {
+    var on = document.querySelector('.tab[aria-selected="true"]');
+    if (on) slideInk(on);
+  });
 })();
 </script>
 </body>
