@@ -14,7 +14,8 @@ import re
 ROOT = pathlib.Path(__file__).parent
 SITE = ROOT / "site"
 EXTS = {".jpg", ".jpeg", ".png", ".webp", ".avif", ".gif"}
-START = "2023-07-17"  # the Spain trip
+START = "2023-07-17"            # the first Marbella trip
+LAST  = "2026-08-18T15:00:00+02:00"   # Marbella again, the last time
 
 # Password gate. She is asked on every visit; nothing is remembered.
 # Matching ignores case, spaces, punctuation and a leading "the".
@@ -412,6 +413,9 @@ h1{font-family:var(--display);font-weight:400;font-size:clamp(44px,12vw,94px);
 h1 .it{font-style:italic;display:block;color:var(--brass)}
 .since{margin:18px 0 0;font-size:13.5px;color:var(--dim);
   font-variant-numeric:tabular-nums}
+.apart{margin:8px 0 0;font-size:13.5px;color:var(--brass);
+  font-variant-numeric:tabular-nums;letter-spacing:.01em}
+.apart b{font-weight:400;font-family:var(--display);font-size:1.3em}
 
 /* ---- the book ---- */
 .book{max-width:820px;margin:0 auto;padding:clamp(44px,8vw,80px) 24px;perspective:2000px}
@@ -713,6 +717,7 @@ body.locked{overflow:hidden}
   <p class="kicker">For Selma</p>
   <h1>Reasons<span class="it">why I love you</span></h1>
   <p class="since" id="since"></p>
+  <p class="apart" id="apart"></p>
 </div>
 
 <section class="tune">
@@ -855,6 +860,7 @@ __LETTERS__
   var photos  = __PHOTOS__;
   var ANSWERS = __ANSWERS__;
   var START   = "__START__";
+  var LAST    = "__LAST__";
   var HOMES   = __HOMES__;
   var PLACES  = __PLACES__;
   var SONG    = "__SONG_ID__";
@@ -973,6 +979,24 @@ __LETTERS__
   document.getElementById('since').textContent =
     new Date(START).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
     + ' — ' + days.toLocaleString() + ' days ago';
+
+  /* ---------- since the last time ---------- */
+  var apartEl = document.getElementById('apart');
+  if (apartEl) {
+    var since = Date.parse(LAST);
+    function tick() {
+      var ms = Date.now() - since;
+      if (ms < 0) { apartEl.textContent = ''; return; }
+      var d = Math.floor(ms / 86400000);
+      var h = Math.floor(ms / 3600000) % 24;
+      var m = Math.floor(ms / 60000) % 60;
+      var sec = Math.floor(ms / 1000) % 60;
+      apartEl.innerHTML = 'Since Marbella, 18 August \u2014 <b>' + d + '</b> days, '
+        + h + 'h ' + m + 'm ' + sec + 's';
+    }
+    tick();
+    setInterval(tick, 1000);
+  }
 
   /* ---------- #47 opens on 47 ---------- */
   function fromHash() {
@@ -1129,6 +1153,7 @@ out = (
     .replace("__REASONS__", json.dumps(reasons, ensure_ascii=False))
     .replace("__PHOTOS__", json.dumps(photos, ensure_ascii=False))
     .replace("__START__", START)
+    .replace("__LAST__", LAST)
     .replace("__HINT__", html.escape(HINT))
     .replace("__SONG_LABEL__", html.escape(SONG_LABEL))
     .replace("__SONG_ID__", html.escape(SONG_ID))
