@@ -19,7 +19,7 @@ LAST  = "2026-08-18T15:00:00+02:00"   # Marbella again, the last time
 
 # Password gate. She is asked on every visit; nothing is remembered.
 # Matching ignores case, spaces, punctuation and a leading "the".
-HINT = "Which restaurant in New York did we have our first date at?"
+HINT = "The restaurant in New York where we had our first date."
 ANSWERS = ["Wayan", "Wayan NYC", "Wayan New York", "Wayan Nolita", "Wayan restaurant"]
 
 # The song. Hosting the recording would be piracy; this sends
@@ -65,9 +65,21 @@ photos = sorted(
     if p.is_file() and p.suffix.lower() in EXTS and not p.name.startswith(".")
 )
 
+def lit(t):
+    """*starred* words come through in red."""
+    out, bits = [], re.split(r"\*([^*]+)\*", t)
+    for k, b in enumerate(bits):
+        out.append(f'<em>{html.escape(b)}</em>' if k % 2 else html.escape(b))
+    return "".join(out)
+
+
+def plain(t):
+    return t.replace("*", "")
+
+
 index_rows = "\n".join(
     f'      <li><a href="#{i}"><span class="n">{i}</span>'
-    f'<span class="t">{html.escape(t)}</span></a></li>'
+    f'<span class="t">{lit(t)}</span></a></li>'
     for i, t in enumerate(reasons, 1)
 )
 
@@ -116,18 +128,42 @@ TIMELINE = [
 # --- Open when... Replace every one of these with your own words. ---
 LETTERS = [
     ("you miss me",
-     "Then I'm missing you at the same time, which is most of the time. "
-     "Go through the hundred. I meant all of them."),
+     "Then I'm missing you at the same time, which is most of the time, and "
+     "usually at the stupid hours. Go through the list. I meant every one of "
+     "them when I wrote it and I mean them now."),
     ("you can't sleep",
-     "Put the song on. Read one reason, not all of them. "
-     "You always fell asleep on the phone anyway."),
+     "Put the song on. Read one reason, not all of them \u2014 you'll be asleep "
+     "before the end. You always fell asleep on the phone anyway, mid-sentence, "
+     "and I never once minded."),
     ("you're annoyed with me",
-     "You're probably right. You usually were, and I took too long to say so."),
+     "You're probably right. You usually were, and I took far too long to say "
+     "so out loud. Be annoyed. It never made me love you less and it never "
+     "will."),
     ("it's been a bad day",
-     "Tell me about it properly, the long version, the way you do. "
-     "I'll still be listening."),
+     "Tell me about it properly. The long version, the one with the timeline "
+     "and the part about what the person actually said. I'll still be listening "
+     "the way I should have been listening all along."),
     ("you forget how good you are",
-     "Read number fifty again. You knew what you deserved before I did."),
+     "Read number fifty again, then read it twice. You knew what you deserved "
+     "long before I understood it. That wasn't you being difficult. That was "
+     "you being right."),
+    ("you're about to do something big",
+     "Interview, presentation, first day, hard conversation \u2014 you walk in "
+     "and the room adjusts to you. It always has. My grandmother noticed it in "
+     "a hallway in ten seconds."),
+    ("you're in Paris and it's raining",
+     "Make the tea. Put something terrible on, the kind of thing you'd watch "
+     "and send me screenshots of at midnight. Not every day has to be useful."),
+    ("someone is lucky to have you",
+     "They will be, and they should know it faster than I did. I hope he books "
+     "the table before you have to ask. That was never a big thing to want."),
+    ("you want to know if it was real",
+     "Three years, a hundred and one reasons, ninety-nine photographs, a "
+     "hundred and thirty-seven thousand messages. It was real. There's no "
+     "version of this where it wasn't."),
+    ("it's been a long time",
+     "Then I hope you're happy, and I hope it's the uncomplicated kind. This "
+     "page doesn't need anything from you. It's just here, and it stays here."),
 ]
 
 # --- The dog. ---
@@ -462,6 +498,9 @@ h1 .it{font-style:italic;display:block;color:var(--red);font-weight:300;
   margin-bottom:clamp(14px,2.5vw,22px)}
 .leaf .say{font-size:clamp(28px,6.4vw,52px);line-height:1.14;margin:0;
   font-weight:300;letter-spacing:-.015em;max-width:17ch;text-wrap:pretty}
+.leaf .say em{font-style:normal;color:var(--red)}
+.index .t em{font-style:normal;color:var(--red)}
+.index a:hover .t em{color:var(--ink)}
 .folio{display:none}
 .page.out-fwd,.page.in-fwd,.page.out-back,.page.in-back{animation:none}
 .page{transition:opacity .2s ease}
@@ -621,18 +660,20 @@ h1 .it{font-style:italic;display:block;color:var(--red);font-weight:300;
 .chip:hover,.chip.on{color:var(--red)}
 
 /* ---- theo ---- */
-.theowrap{display:flex;align-items:center;gap:clamp(24px,5vw,54px);
-  flex-wrap:wrap;background:none;border:0;padding:0}
-.film{margin:0;flex:0 0 auto;width:clamp(185px,32vw,250px);background:var(--leaf);
-  padding:clamp(10px,1.8vw,14px);
-  box-shadow:0 1px 0 rgba(34,32,28,.08),0 20px 40px -30px rgba(34,32,28,.55)}
-.film video{width:100%;height:auto}
-.paw{display:block;width:26px;color:var(--red);margin-bottom:12px}
+.theowrap{display:flex;flex-direction:column;align-items:center;
+  gap:clamp(26px,4.5vw,42px);background:none;border:0;padding:0;
+  max-width:620px;margin:0 auto;text-align:center}
+.film{margin:0;width:100%;background:var(--leaf);
+  padding:clamp(12px,2.2vw,18px) clamp(12px,2.2vw,18px) clamp(34px,4.5vw,46px);
+  box-shadow:0 1px 0 rgba(34,32,28,.08),0 26px 50px -34px rgba(34,32,28,.55)}
+.film video{width:100%;height:auto;max-height:68svh;object-fit:contain;
+  background:#1A1814}
+.paw{width:30px;color:var(--red);margin:0 auto 14px}
 .paw svg{width:100%;height:auto}
-.pupsay{flex:1 1 260px;min-width:0;max-width:40ch}
-.pupsay h2{font-weight:300;font-style:italic;font-size:clamp(23px,4.2vw,32px);
-  margin:0 0 7px}
-.pupsay p{margin:0;color:var(--soft);font-size:15.5px;line-height:1.55}
+.pupsay{max-width:44ch}
+.pupsay h2{font-weight:300;font-style:italic;font-size:clamp(25px,4.6vw,36px);
+  margin:0 0 9px}
+.pupsay p{margin:0;color:var(--soft);font-size:16px;line-height:1.6}
 
 /* ---- say something ---- */
 textarea{width:100%;background:var(--leaf);border:0;border-left:2px solid var(--rule);
@@ -653,8 +694,12 @@ textarea::placeholder{color:var(--faint);font-style:italic}
 #gate[hidden]{display:none}
 #gate .box{width:100%;max-width:440px}
 #gate .mark{font-size:26px;color:var(--red);margin:0 0 30px}
-#gate p.q{font-size:clamp(23px,5.2vw,34px);line-height:1.2;margin:0 0 30px;
-  font-weight:300;letter-spacing:-.015em;text-wrap:pretty}
+#gate p.q{font-size:clamp(30px,6.4vw,44px);line-height:1.05;margin:0 0 16px;
+  font-weight:300;letter-spacing:-.025em}
+#gate .clue{margin:0 0 32px;font-size:clamp(17px,3.2vw,21px);font-style:italic;
+  color:var(--soft);line-height:1.4;text-wrap:pretty}
+#gate .clue span{display:block;font-family:var(--type);font-style:normal;
+  font-size:11.5px;color:var(--red);margin-bottom:6px}
 #gate form{display:flex;flex-direction:column;gap:16px;align-items:flex-start}
 #gate input{width:100%;font-family:var(--serif);font-size:19px;color:var(--ink);
   background:none;border:0;border-bottom:1px solid var(--rule);padding:9px 2px}
@@ -679,9 +724,10 @@ footer .mark{color:var(--red);font-size:13px}
 <div id="gate" hidden>
   <div class="box">
     <p class="mark">&#9829;</p>
-    <p class="q">__HINT__</p>
+    <p class="q">Password</p>
+    <p class="clue"><span>Hint</span>__HINT__</p>
     <form id="gateForm" autocomplete="off">
-      <input id="gateInput" type="text" placeholder="Type it here" aria-label="Answer"
+      <input id="gateInput" type="text" placeholder="Type it here" aria-label="Password"
              autocapitalize="off" autocorrect="off" spellcheck="false">
       <button type="submit">Open</button>
     </form>
@@ -718,8 +764,11 @@ footer .mark{color:var(--red);font-size:13px}
   <div class="tabrow">
     <button type="button" class="tab" data-panel="p-reasons">Reasons</button>
     <button type="button" class="tab" data-panel="p-photos">Photos</button>
-    <button type="button" class="tab" data-panel="p-years">Us</button>
+    <button type="button" class="tab" data-panel="p-years">Three years</button>
+    <button type="button" class="tab" data-panel="p-map">Where we are</button>
     <button type="button" class="tab" data-panel="p-words">Your words</button>
+    <button type="button" class="tab" data-panel="p-you">You</button>
+    <button type="button" class="tab" data-panel="p-letters">Open when</button>
     <button type="button" class="tab" data-panel="p-theo">Theo</button>
     <button type="button" class="tab" data-panel="p-say">Say something</button>
     <span class="ink" id="ink" aria-hidden="true"></span>
@@ -776,8 +825,10 @@ __ROWS__
   <ol class="tl">
 __TIMELINE__
   </ol>
+</div>
 
-  <div class="atlas-top spaced">
+<div class="panel" id="p-map" role="tabpanel">
+  <div class="atlas-top">
     <h2>Where we are</h2>
     <div class="gap">__APART__ km<small>apart</small></div>
   </div>
@@ -798,14 +849,19 @@ __TIMELINE__
 <div class="panel" id="p-words" role="tabpanel">
   <div class="atlas-top"><h2>How you talk</h2></div>
   __LEXICON__
+</div>
 
-  <div class="atlas-top spaced"><h2>Open when&hellip;</h2></div>
+<div class="panel" id="p-you" role="tabpanel">
+  <div class="atlas-top"><h2>What you are made of</h2></div>
+  __FIGURE__
+</div>
+
+<div class="panel" id="p-letters" role="tabpanel">
+  <div class="atlas-top"><h2>Open when&hellip;</h2></div>
+  <p class="sub">Ten of them. Each one opens.</p>
   <div class="envs">
 __LETTERS__
   </div>
-
-  <div class="atlas-top spaced"><h2>What you are made of</h2></div>
-  __FIGURE__
 </div>
 
 <div class="panel" id="p-theo" role="tabpanel">
@@ -919,7 +975,7 @@ __LETTERS__
   function paintLeaf(i, picked) {
     at = (i + reasons.length) % reasons.length;
     num.textContent = at + 1;
-    say.textContent = reasons[at];
+    say.innerHTML = reasons[at];
     folio.textContent = (at + 1) + ' ⁄ ' + reasons.length;
     label.textContent = (at === today && !picked) ? 'Today' : 'One of them';
   }
@@ -1234,7 +1290,7 @@ __LETTERS__
 out = (
     TEMPLATE.replace("__ROWS__", index_rows)
     .replace("__HERO__", hero_img)
-    .replace("__REASONS__", json.dumps(reasons, ensure_ascii=False))
+    .replace("__REASONS__", json.dumps([lit(t) for t in reasons], ensure_ascii=False))
     .replace("__PHOTOS__", json.dumps(photos, ensure_ascii=False))
     .replace("__START__", START)
     .replace("__LAST__", LAST)
@@ -1254,7 +1310,7 @@ out = (
     .replace("__THEO_WHY__", html.escape(THEO[1]))
     .replace("__ANSWERS__", json.dumps(ANSWERS))
     .replace("__COUNT__", str(len(reasons)))
-    .replace("__FIRST__", html.escape(reasons[0]))
+    .replace("__FIRST__", lit(reasons[0]))
 )
 (SITE / "index.html").write_text(out, "utf-8")
 print(f"built site/index.html - {len(reasons)} reasons, {len(photos)} photos")

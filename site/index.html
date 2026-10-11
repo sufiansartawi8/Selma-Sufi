@@ -100,6 +100,9 @@ h1 .it{font-style:italic;display:block;color:var(--red);font-weight:300;
   margin-bottom:clamp(14px,2.5vw,22px)}
 .leaf .say{font-size:clamp(28px,6.4vw,52px);line-height:1.14;margin:0;
   font-weight:300;letter-spacing:-.015em;max-width:17ch;text-wrap:pretty}
+.leaf .say em{font-style:normal;color:var(--red)}
+.index .t em{font-style:normal;color:var(--red)}
+.index a:hover .t em{color:var(--ink)}
 .folio{display:none}
 .page.out-fwd,.page.in-fwd,.page.out-back,.page.in-back{animation:none}
 .page{transition:opacity .2s ease}
@@ -259,18 +262,20 @@ h1 .it{font-style:italic;display:block;color:var(--red);font-weight:300;
 .chip:hover,.chip.on{color:var(--red)}
 
 /* ---- theo ---- */
-.theowrap{display:flex;align-items:center;gap:clamp(24px,5vw,54px);
-  flex-wrap:wrap;background:none;border:0;padding:0}
-.film{margin:0;flex:0 0 auto;width:clamp(185px,32vw,250px);background:var(--leaf);
-  padding:clamp(10px,1.8vw,14px);
-  box-shadow:0 1px 0 rgba(34,32,28,.08),0 20px 40px -30px rgba(34,32,28,.55)}
-.film video{width:100%;height:auto}
-.paw{display:block;width:26px;color:var(--red);margin-bottom:12px}
+.theowrap{display:flex;flex-direction:column;align-items:center;
+  gap:clamp(26px,4.5vw,42px);background:none;border:0;padding:0;
+  max-width:620px;margin:0 auto;text-align:center}
+.film{margin:0;width:100%;background:var(--leaf);
+  padding:clamp(12px,2.2vw,18px) clamp(12px,2.2vw,18px) clamp(34px,4.5vw,46px);
+  box-shadow:0 1px 0 rgba(34,32,28,.08),0 26px 50px -34px rgba(34,32,28,.55)}
+.film video{width:100%;height:auto;max-height:68svh;object-fit:contain;
+  background:#1A1814}
+.paw{width:30px;color:var(--red);margin:0 auto 14px}
 .paw svg{width:100%;height:auto}
-.pupsay{flex:1 1 260px;min-width:0;max-width:40ch}
-.pupsay h2{font-weight:300;font-style:italic;font-size:clamp(23px,4.2vw,32px);
-  margin:0 0 7px}
-.pupsay p{margin:0;color:var(--soft);font-size:15.5px;line-height:1.55}
+.pupsay{max-width:44ch}
+.pupsay h2{font-weight:300;font-style:italic;font-size:clamp(25px,4.6vw,36px);
+  margin:0 0 9px}
+.pupsay p{margin:0;color:var(--soft);font-size:16px;line-height:1.6}
 
 /* ---- say something ---- */
 textarea{width:100%;background:var(--leaf);border:0;border-left:2px solid var(--rule);
@@ -291,8 +296,12 @@ textarea::placeholder{color:var(--faint);font-style:italic}
 #gate[hidden]{display:none}
 #gate .box{width:100%;max-width:440px}
 #gate .mark{font-size:26px;color:var(--red);margin:0 0 30px}
-#gate p.q{font-size:clamp(23px,5.2vw,34px);line-height:1.2;margin:0 0 30px;
-  font-weight:300;letter-spacing:-.015em;text-wrap:pretty}
+#gate p.q{font-size:clamp(30px,6.4vw,44px);line-height:1.05;margin:0 0 16px;
+  font-weight:300;letter-spacing:-.025em}
+#gate .clue{margin:0 0 32px;font-size:clamp(17px,3.2vw,21px);font-style:italic;
+  color:var(--soft);line-height:1.4;text-wrap:pretty}
+#gate .clue span{display:block;font-family:var(--type);font-style:normal;
+  font-size:11.5px;color:var(--red);margin-bottom:6px}
 #gate form{display:flex;flex-direction:column;gap:16px;align-items:flex-start}
 #gate input{width:100%;font-family:var(--serif);font-size:19px;color:var(--ink);
   background:none;border:0;border-bottom:1px solid var(--rule);padding:9px 2px}
@@ -317,9 +326,10 @@ footer .mark{color:var(--red);font-size:13px}
 <div id="gate" hidden>
   <div class="box">
     <p class="mark">&#9829;</p>
-    <p class="q">Which restaurant in New York did we have our first date at?</p>
+    <p class="q">Password</p>
+    <p class="clue"><span>Hint</span>The restaurant in New York where we had our first date.</p>
     <form id="gateForm" autocomplete="off">
-      <input id="gateInput" type="text" placeholder="Type it here" aria-label="Answer"
+      <input id="gateInput" type="text" placeholder="Type it here" aria-label="Password"
              autocapitalize="off" autocorrect="off" spellcheck="false">
       <button type="submit">Open</button>
     </form>
@@ -356,8 +366,11 @@ footer .mark{color:var(--red);font-size:13px}
   <div class="tabrow">
     <button type="button" class="tab" data-panel="p-reasons">Reasons</button>
     <button type="button" class="tab" data-panel="p-photos">Photos</button>
-    <button type="button" class="tab" data-panel="p-years">Us</button>
+    <button type="button" class="tab" data-panel="p-years">Three years</button>
+    <button type="button" class="tab" data-panel="p-map">Where we are</button>
     <button type="button" class="tab" data-panel="p-words">Your words</button>
+    <button type="button" class="tab" data-panel="p-you">You</button>
+    <button type="button" class="tab" data-panel="p-letters">Open when</button>
     <button type="button" class="tab" data-panel="p-theo">Theo</button>
     <button type="button" class="tab" data-panel="p-say">Say something</button>
     <span class="ink" id="ink" aria-hidden="true"></span>
@@ -372,7 +385,7 @@ footer .mark{color:var(--red);font-size:13px}
     <article class="page" id="page">
       <div class="leaf">
         <div class="num" id="num">1</div>
-        <p class="say" id="say">The way you walk into a room smiling. Even my grandma noticed</p>
+        <p class="say" id="say">The way you <em>walk into a room smiling</em>. Even my grandma noticed</p>
       </div>
       <p class="folio" id="folio"></p>
     </article>
@@ -389,107 +402,107 @@ footer .mark{color:var(--red);font-size:13px}
       <summary><h2>All of them</h2><span class="meta">101</span></summary>
       <div class="panel-inner">
         <ol>
-      <li><a href="#1"><span class="n">1</span><span class="t">The way you walk into a room smiling. Even my grandma noticed</span></a></li>
-      <li><a href="#2"><span class="n">2</span><span class="t">Your eyes</span></a></li>
-      <li><a href="#3"><span class="n">3</span><span class="t">Your smile</span></a></li>
-      <li><a href="#4"><span class="n">4</span><span class="t">Your laugh. It could make anyone fall in love with you</span></a></li>
-      <li><a href="#5"><span class="n">5</span><span class="t">Your face with makeup</span></a></li>
-      <li><a href="#6"><span class="n">6</span><span class="t">Your face without makeup</span></a></li>
-      <li><a href="#7"><span class="n">7</span><span class="t">Your body in a bikini</span></a></li>
-      <li><a href="#8"><span class="n">8</span><span class="t">Your body with nothing on</span></a></li>
-      <li><a href="#9"><span class="n">9</span><span class="t">You were a very cute baby</span></a></li>
-      <li><a href="#10"><span class="n">10</span><span class="t">Your beautiful soul</span></a></li>
-      <li><a href="#11"><span class="n">11</span><span class="t">The way you switch between French, English and Arabic mid-sentence</span></a></li>
-      <li><a href="#12"><span class="n">12</span><span class="t">You stop speaking English when you&#x27;re tired</span></a></li>
-      <li><a href="#13"><span class="n">13</span><span class="t">When you say “exact”</span></a></li>
-      <li><a href="#14"><span class="n">14</span><span class="t">When you say hihihi</span></a></li>
-      <li><a href="#15"><span class="n">15</span><span class="t">You always use 🤍</span></a></li>
-      <li><a href="#16"><span class="n">16</span><span class="t">When you tell me ily out of nowhere</span></a></li>
-      <li><a href="#17"><span class="n">17</span><span class="t">Your voice notes where you&#x27;re laughing so hard I can&#x27;t understand a word</span></a></li>
-      <li><a href="#18"><span class="n">18</span><span class="t">“I&#x27;m home,” sent every time so I&#x27;d stop wondering</span></a></li>
-      <li><a href="#19"><span class="n">19</span><span class="t">“My door is open in Paris”</span></a></li>
-      <li><a href="#20"><span class="n">20</span><span class="t">You sleep anywhere and everywhere — flights, subways, car rides, my lap</span></a></li>
-      <li><a href="#21"><span class="n">21</span><span class="t">Being in lalaland when we&#x27;re walking together</span></a></li>
-      <li><a href="#22"><span class="n">22</span><span class="t">Your love for food and the fact that you never actually eat</span></a></li>
-      <li><a href="#23"><span class="n">23</span><span class="t">The food you make always looks incredible and I never once got to try it</span></a></li>
-      <li><a href="#24"><span class="n">24</span><span class="t">You forget to eat and forget to drink water and I have to remind you about both</span></a></li>
-      <li><a href="#25"><span class="n">25</span><span class="t">When you&#x27;re starving after work</span></a></li>
-      <li><a href="#26"><span class="n">26</span><span class="t">You&#x27;re a boss lady, and people trust you blindly</span></a></li>
-      <li><a href="#27"><span class="n">27</span><span class="t">You want a real career. You&#x27;re ambitious. You never wanted to be a stay-at-home Pilates mom</span></a></li>
-      <li><a href="#28"><span class="n">28</span><span class="t">You&#x27;re building a life in Paris when you don&#x27;t have to. You could be at home with your parents and you chose not to be</span></a></li>
-      <li><a href="#29"><span class="n">29</span><span class="t">You&#x27;re so good at work</span></a></li>
-      <li><a href="#30"><span class="n">30</span><span class="t">You&#x27;re very intelligent, and I get your opinion on everything before I do it</span></a></li>
-      <li><a href="#31"><span class="n">31</span><span class="t">You listen to my startup ideas even though you think they&#x27;re stupid</span></a></li>
-      <li><a href="#32"><span class="n">32</span><span class="t">You keep pushing me</span></a></li>
-      <li><a href="#33"><span class="n">33</span><span class="t">“I&#x27;m proud of you,” said about things that hadn&#x27;t earned it yet</span></a></li>
-      <li><a href="#34"><span class="n">34</span><span class="t">Your support for every single interview I&#x27;ve done</span></a></li>
-      <li><a href="#35"><span class="n">35</span><span class="t">You&#x27;re cultured, and curious about every culture that isn&#x27;t your own</span></a></li>
-      <li><a href="#36"><span class="n">36</span><span class="t">You&#x27;re specific about what you like. Nothing about you is basic</span></a></li>
-      <li><a href="#37"><span class="n">37</span><span class="t">You don&#x27;t follow trends, you set them</span></a></li>
-      <li><a href="#38"><span class="n">38</span><span class="t">You&#x27;re always there for me — fighting or not, whether you hate me that week or not</span></a></li>
-      <li><a href="#39"><span class="n">39</span><span class="t">Even when you&#x27;re mad at me you still say goodnight</span></a></li>
-      <li><a href="#40"><span class="n">40</span><span class="t">You&#x27;re so invested in my life. My problems, my wins, and the stupid things</span></a></li>
-      <li><a href="#41"><span class="n">41</span><span class="t">The way you handle all my stupidity</span></a></li>
-      <li><a href="#42"><span class="n">42</span><span class="t">You&#x27;re appreciative even when I haven&#x27;t given you a reason to be</span></a></li>
-      <li><a href="#43"><span class="n">43</span><span class="t">You go with the flow even though I&#x27;m a terrible planner</span></a></li>
-      <li><a href="#44"><span class="n">44</span><span class="t">You were patient when I lost the car for 20 minutes</span></a></li>
-      <li><a href="#45"><span class="n">45</span><span class="t">When I got sick in Dubai and you took care of me</span></a></li>
-      <li><a href="#46"><span class="n">46</span><span class="t">The way you push me about the gym with zero mercy</span></a></li>
-      <li><a href="#47"><span class="n">47</span><span class="t">When you tell me I&#x27;m disgusting for sweating</span></a></li>
-      <li><a href="#48"><span class="n">48</span><span class="t">You&#x27;re a beast at the gym</span></a></li>
-      <li><a href="#49"><span class="n">49</span><span class="t">The way you talk about your parents</span></a></li>
-      <li><a href="#50"><span class="n">50</span><span class="t">That you&#x27;re literally Moroccan royalty</span></a></li>
-      <li><a href="#51"><span class="n">51</span><span class="t">You buy things for your mom before you buy anything for yourself. Always</span></a></li>
-      <li><a href="#52"><span class="n">52</span><span class="t">Your brothers, and the way you worry about all of them at once</span></a></li>
-      <li><a href="#53"><span class="n">53</span><span class="t">Being Theo&#x27;s mom</span></a></li>
-      <li><a href="#54"><span class="n">54</span><span class="t">You love my mom</span></a></li>
-      <li><a href="#55"><span class="n">55</span><span class="t">My mom loves you</span></a></li>
-      <li><a href="#56"><span class="n">56</span><span class="t">How you blended into my life in Amman — my friends, my family, all of it</span></a></li>
-      <li><a href="#57"><span class="n">57</span><span class="t">How certain you are that you&#x27;re right with your friends. And how often you actually are</span></a></li>
-      <li><a href="#58"><span class="n">58</span><span class="t">You love Palestine</span></a></li>
-      <li><a href="#59"><span class="n">59</span><span class="t">Your rings and your jewellery, all in the same colour family</span></a></li>
-      <li><a href="#60"><span class="n">60</span><span class="t">When you send me mirror selfies of your outfit</span></a></li>
-      <li><a href="#61"><span class="n">61</span><span class="t">When you ask me what colour to do your nails</span></a></li>
-      <li><a href="#62"><span class="n">62</span><span class="t">Your love of flowers</span></a></li>
-      <li><a href="#63"><span class="n">63</span><span class="t">That you want a special wedding ring</span></a></li>
-      <li><a href="#64"><span class="n">64</span><span class="t">Shopping with you</span></a></li>
-      <li><a href="#65"><span class="n">65</span><span class="t">You appreciate the gifts I get you even when you think they&#x27;re stupid</span></a></li>
-      <li><a href="#66"><span class="n">66</span><span class="t">You know exactly what I like</span></a></li>
-      <li><a href="#67"><span class="n">67</span><span class="t">When you help me clean out my Instagram following</span></a></li>
-      <li><a href="#68"><span class="n">68</span><span class="t">When you send me a meme or a reel that&#x27;s really a message you want to send me</span></a></li>
-      <li><a href="#69"><span class="n">69</span><span class="t">The stickers we make every time we&#x27;re out</span></a></li>
-      <li><a href="#70"><span class="n">70</span><span class="t">Just hugging you</span></a></li>
-      <li><a href="#71"><span class="n">71</span><span class="t">Just kissing you</span></a></li>
-      <li><a href="#72"><span class="n">72</span><span class="t">Being close to you</span></a></li>
-      <li><a href="#73"><span class="n">73</span><span class="t">Sleeping next to you, even though I&#x27;m annoying and keep waking you up</span></a></li>
-      <li><a href="#74"><span class="n">74</span><span class="t">Sleeping in hotels with you</span></a></li>
-      <li><a href="#75"><span class="n">75</span><span class="t">Our endless mirror selfies</span></a></li>
-      <li><a href="#76"><span class="n">76</span><span class="t">Cuddling and watching stupid things together</span></a></li>
-      <li><a href="#77"><span class="n">77</span><span class="t">Having dinner with you, and then eating yours too</span></a></li>
-      <li><a href="#78"><span class="n">78</span><span class="t">Having drinks with you, back when you drank</span></a></li>
-      <li><a href="#79"><span class="n">79</span><span class="t">Dancing with you</span></a></li>
-      <li><a href="#80"><span class="n">80</span><span class="t">Driving with you</span></a></li>
-      <li><a href="#81"><span class="n">81</span><span class="t">You think I&#x27;m funny</span></a></li>
-      <li><a href="#82"><span class="n">82</span><span class="t">When you took edibles with me</span></a></li>
-      <li><a href="#83"><span class="n">83</span><span class="t">When you ask if I&#x27;ve met anyone, even though you know there&#x27;s no one</span></a></li>
-      <li><a href="#84"><span class="n">84</span><span class="t">Even your cranky days</span></a></li>
-      <li><a href="#85"><span class="n">85</span><span class="t">Our first date. Best one I&#x27;ve had</span></a></li>
-      <li><a href="#86"><span class="n">86</span><span class="t">When you were the only person who was nice to me in Marbella</span></a></li>
-      <li><a href="#87"><span class="n">87</span><span class="t">That you came to Marbella anyway, even when we were falling apart</span></a></li>
-      <li><a href="#88"><span class="n">88</span><span class="t">Walking the streets of New York with you</span></a></li>
-      <li><a href="#89"><span class="n">89</span><span class="t">Sitting in New York parks with you</span></a></li>
-      <li><a href="#90"><span class="n">90</span><span class="t">Our lunch breaks in NYC</span></a></li>
-      <li><a href="#91"><span class="n">91</span><span class="t">Cycling Manhattan with you</span></a></li>
-      <li><a href="#92"><span class="n">92</span><span class="t">Universal Studios with you</span></a></li>
-      <li><a href="#93"><span class="n">93</span><span class="t">Wadi Rum in the rain with you</span></a></li>
-      <li><a href="#94"><span class="n">94</span><span class="t">When you left your passport in Amman and we were already in Petra</span></a></li>
-      <li><a href="#95"><span class="n">95</span><span class="t">When you let me put in an OMI shift at the conference</span></a></li>
-      <li><a href="#96"><span class="n">96</span><span class="t">The Slimi collage t-shirt you made me</span></a></li>
-      <li><a href="#97"><span class="n">97</span><span class="t">Travelling with you. You&#x27;re the best travel partner I&#x27;ve had</span></a></li>
-      <li><a href="#98"><span class="n">98</span><span class="t">Your love for an adventure</span></a></li>
-      <li><a href="#99"><span class="n">99</span><span class="t">2026 was a hard year and you still made it easy</span></a></li>
-      <li><a href="#100"><span class="n">100</span><span class="t">You always come back, even when I fuck up. You&#x27;re better than me</span></a></li>
-      <li><a href="#101"><span class="n">101</span><span class="t">There is no number that finishes this. I just stopped writing.</span></a></li>
+      <li><a href="#1"><span class="n">1</span><span class="t">The way you <em>walk into a room smiling</em>. Even my grandma noticed</span></a></li>
+      <li><a href="#2"><span class="n">2</span><span class="t">Your <em>eyes</em></span></a></li>
+      <li><a href="#3"><span class="n">3</span><span class="t">Your <em>smile</em></span></a></li>
+      <li><a href="#4"><span class="n">4</span><span class="t">Your laugh. It could make anyone <em>fall in love</em> with you</span></a></li>
+      <li><a href="#5"><span class="n">5</span><span class="t">Your face <em>with makeup</em></span></a></li>
+      <li><a href="#6"><span class="n">6</span><span class="t">Your face <em>without makeup</em></span></a></li>
+      <li><a href="#7"><span class="n">7</span><span class="t">Your body in a <em>bikini</em></span></a></li>
+      <li><a href="#8"><span class="n">8</span><span class="t">Your body with <em>nothing on</em></span></a></li>
+      <li><a href="#9"><span class="n">9</span><span class="t">You were a <em>very cute baby</em></span></a></li>
+      <li><a href="#10"><span class="n">10</span><span class="t">Your <em>beautiful soul</em></span></a></li>
+      <li><a href="#11"><span class="n">11</span><span class="t">The way you switch between <em>French, English and Arabic</em> mid-sentence</span></a></li>
+      <li><a href="#12"><span class="n">12</span><span class="t">You stop speaking English <em>when you&#x27;re tired</em></span></a></li>
+      <li><a href="#13"><span class="n">13</span><span class="t">When you say “<em>exact</em>”</span></a></li>
+      <li><a href="#14"><span class="n">14</span><span class="t">When you say <em>hihihi</em></span></a></li>
+      <li><a href="#15"><span class="n">15</span><span class="t">You always use <em>🤍</em></span></a></li>
+      <li><a href="#16"><span class="n">16</span><span class="t">When you tell me <em>ily</em> out of nowhere</span></a></li>
+      <li><a href="#17"><span class="n">17</span><span class="t">Your voice notes where you&#x27;re <em>laughing so hard</em> I can&#x27;t understand a word</span></a></li>
+      <li><a href="#18"><span class="n">18</span><span class="t">“<em>I&#x27;m home</em>,” sent every time so I&#x27;d stop wondering</span></a></li>
+      <li><a href="#19"><span class="n">19</span><span class="t">“<em>My door is open in Paris</em>”</span></a></li>
+      <li><a href="#20"><span class="n">20</span><span class="t">You sleep <em>anywhere and everywhere</em> — flights, subways, car rides, my lap</span></a></li>
+      <li><a href="#21"><span class="n">21</span><span class="t">Being in <em>lalaland</em> when we&#x27;re walking together</span></a></li>
+      <li><a href="#22"><span class="n">22</span><span class="t">Your love for food and the fact that you <em>never actually eat</em></span></a></li>
+      <li><a href="#23"><span class="n">23</span><span class="t">The food you make always looks incredible and I <em>never once got to try it</em></span></a></li>
+      <li><a href="#24"><span class="n">24</span><span class="t">You forget to eat and forget to drink water and I have to <em>remind you about both</em></span></a></li>
+      <li><a href="#25"><span class="n">25</span><span class="t">When you&#x27;re <em>starving</em> after work</span></a></li>
+      <li><a href="#26"><span class="n">26</span><span class="t">You&#x27;re a <em>boss lady</em>, and people trust you blindly</span></a></li>
+      <li><a href="#27"><span class="n">27</span><span class="t">You want a real career. You&#x27;re <em>ambitious</em>. You never wanted to be a stay-at-home Pilates mom</span></a></li>
+      <li><a href="#28"><span class="n">28</span><span class="t">You&#x27;re building a life in Paris when you don&#x27;t have to. You could be at home with your parents and <em>you chose not to be</em></span></a></li>
+      <li><a href="#29"><span class="n">29</span><span class="t">You&#x27;re <em>so good at work</em></span></a></li>
+      <li><a href="#30"><span class="n">30</span><span class="t">You&#x27;re very intelligent, and I get <em>your opinion on everything</em> before I do it</span></a></li>
+      <li><a href="#31"><span class="n">31</span><span class="t">You listen to my startup ideas even though you think they&#x27;re <em>stupid</em></span></a></li>
+      <li><a href="#32"><span class="n">32</span><span class="t">You <em>keep pushing me</em></span></a></li>
+      <li><a href="#33"><span class="n">33</span><span class="t">“I&#x27;m proud of you,” said about things that <em>hadn&#x27;t earned it yet</em></span></a></li>
+      <li><a href="#34"><span class="n">34</span><span class="t">Your support for <em>every single interview</em> I&#x27;ve done</span></a></li>
+      <li><a href="#35"><span class="n">35</span><span class="t">You&#x27;re cultured, and <em>curious</em> about every culture that isn&#x27;t your own</span></a></li>
+      <li><a href="#36"><span class="n">36</span><span class="t">You&#x27;re specific about what you like. <em>Nothing about you is basic</em></span></a></li>
+      <li><a href="#37"><span class="n">37</span><span class="t">You don&#x27;t follow trends, <em>you set them</em></span></a></li>
+      <li><a href="#38"><span class="n">38</span><span class="t">You&#x27;re always there for me — fighting or not, <em>whether you hate me that week or not</em></span></a></li>
+      <li><a href="#39"><span class="n">39</span><span class="t">Even when you&#x27;re mad at me you <em>still say goodnight</em></span></a></li>
+      <li><a href="#40"><span class="n">40</span><span class="t">You&#x27;re so invested in my life. My problems, my wins, and <em>the stupid things</em></span></a></li>
+      <li><a href="#41"><span class="n">41</span><span class="t">The way you handle <em>all my stupidity</em></span></a></li>
+      <li><a href="#42"><span class="n">42</span><span class="t">You&#x27;re appreciative even when I <em>haven&#x27;t given you a reason</em> to be</span></a></li>
+      <li><a href="#43"><span class="n">43</span><span class="t">You go with the flow even though I&#x27;m a <em>terrible planner</em></span></a></li>
+      <li><a href="#44"><span class="n">44</span><span class="t">You were <em>patient</em> when I lost the car for 20 minutes</span></a></li>
+      <li><a href="#45"><span class="n">45</span><span class="t">When I got sick in Dubai and you <em>took care of me</em></span></a></li>
+      <li><a href="#46"><span class="n">46</span><span class="t">The way you push me about the gym with <em>zero mercy</em></span></a></li>
+      <li><a href="#47"><span class="n">47</span><span class="t">When you tell me I&#x27;m <em>disgusting</em> for sweating</span></a></li>
+      <li><a href="#48"><span class="n">48</span><span class="t">You&#x27;re a <em>beast</em> at the gym</span></a></li>
+      <li><a href="#49"><span class="n">49</span><span class="t">The way you talk about <em>your parents</em></span></a></li>
+      <li><a href="#50"><span class="n">50</span><span class="t">That you&#x27;re literally <em>Moroccan royalty</em></span></a></li>
+      <li><a href="#51"><span class="n">51</span><span class="t">You buy things for your mom before you buy anything for yourself. <em>Always</em></span></a></li>
+      <li><a href="#52"><span class="n">52</span><span class="t">Your brothers, and the way you <em>worry about all of them at once</em></span></a></li>
+      <li><a href="#53"><span class="n">53</span><span class="t">Being <em>Theo&#x27;s mom</em></span></a></li>
+      <li><a href="#54"><span class="n">54</span><span class="t">You <em>love my mom</em></span></a></li>
+      <li><a href="#55"><span class="n">55</span><span class="t">My mom <em>loves you</em></span></a></li>
+      <li><a href="#56"><span class="n">56</span><span class="t">How you <em>blended into my life</em> in Amman — my friends, my family, all of it</span></a></li>
+      <li><a href="#57"><span class="n">57</span><span class="t">How certain you are that you&#x27;re right with your friends. And <em>how often you actually are</em></span></a></li>
+      <li><a href="#58"><span class="n">58</span><span class="t">You love <em>Palestine</em></span></a></li>
+      <li><a href="#59"><span class="n">59</span><span class="t">Your rings and your jewellery, all in the <em>same colour family</em></span></a></li>
+      <li><a href="#60"><span class="n">60</span><span class="t">When you send me <em>mirror selfies</em> of your outfit</span></a></li>
+      <li><a href="#61"><span class="n">61</span><span class="t">When you ask me <em>what colour</em> to do your nails</span></a></li>
+      <li><a href="#62"><span class="n">62</span><span class="t">Your love of <em>flowers</em></span></a></li>
+      <li><a href="#63"><span class="n">63</span><span class="t">That you want a <em>special</em> wedding ring</span></a></li>
+      <li><a href="#64"><span class="n">64</span><span class="t"><em>Shopping</em> with you</span></a></li>
+      <li><a href="#65"><span class="n">65</span><span class="t">You appreciate the gifts I get you even when <em>you think they&#x27;re stupid</em></span></a></li>
+      <li><a href="#66"><span class="n">66</span><span class="t">You know <em>exactly what I like</em></span></a></li>
+      <li><a href="#67"><span class="n">67</span><span class="t">When you help me clean out my <em>Instagram</em> following</span></a></li>
+      <li><a href="#68"><span class="n">68</span><span class="t">When you send me a meme or a reel that&#x27;s <em>really a message</em> you want to send me</span></a></li>
+      <li><a href="#69"><span class="n">69</span><span class="t">The <em>stickers</em> we make every time we&#x27;re out</span></a></li>
+      <li><a href="#70"><span class="n">70</span><span class="t">Just <em>hugging</em> you</span></a></li>
+      <li><a href="#71"><span class="n">71</span><span class="t">Just <em>kissing</em> you</span></a></li>
+      <li><a href="#72"><span class="n">72</span><span class="t">Being <em>close to you</em></span></a></li>
+      <li><a href="#73"><span class="n">73</span><span class="t">Sleeping next to you, even though I&#x27;m annoying and <em>keep waking you up</em></span></a></li>
+      <li><a href="#74"><span class="n">74</span><span class="t">Sleeping in <em>hotels</em> with you</span></a></li>
+      <li><a href="#75"><span class="n">75</span><span class="t">Our <em>endless</em> mirror selfies</span></a></li>
+      <li><a href="#76"><span class="n">76</span><span class="t">Cuddling and watching <em>stupid things together</em></span></a></li>
+      <li><a href="#77"><span class="n">77</span><span class="t">Having dinner with you, and then <em>eating yours too</em></span></a></li>
+      <li><a href="#78"><span class="n">78</span><span class="t">Having drinks with you, <em>back when you drank</em></span></a></li>
+      <li><a href="#79"><span class="n">79</span><span class="t"><em>Dancing</em> with you</span></a></li>
+      <li><a href="#80"><span class="n">80</span><span class="t"><em>Driving</em> with you</span></a></li>
+      <li><a href="#81"><span class="n">81</span><span class="t">You think I&#x27;m <em>funny</em></span></a></li>
+      <li><a href="#82"><span class="n">82</span><span class="t">When you took <em>edibles</em> with me</span></a></li>
+      <li><a href="#83"><span class="n">83</span><span class="t">When you ask if I&#x27;ve met anyone, even though you know <em>there&#x27;s no one</em></span></a></li>
+      <li><a href="#84"><span class="n">84</span><span class="t">Even your <em>cranky days</em></span></a></li>
+      <li><a href="#85"><span class="n">85</span><span class="t">Our first date. <em>Best one I&#x27;ve had</em></span></a></li>
+      <li><a href="#86"><span class="n">86</span><span class="t">When you were the <em>only person who was nice to me</em> in Marbella</span></a></li>
+      <li><a href="#87"><span class="n">87</span><span class="t">That you <em>came to Marbella anyway</em>, even when we were falling apart</span></a></li>
+      <li><a href="#88"><span class="n">88</span><span class="t"><em>Walking the streets</em> of New York with you</span></a></li>
+      <li><a href="#89"><span class="n">89</span><span class="t"><em>Sitting</em> in New York parks with you</span></a></li>
+      <li><a href="#90"><span class="n">90</span><span class="t">Our <em>lunch breaks</em> in NYC</span></a></li>
+      <li><a href="#91"><span class="n">91</span><span class="t"><em>Cycling Manhattan</em> with you</span></a></li>
+      <li><a href="#92"><span class="n">92</span><span class="t"><em>Universal Studios</em> with you</span></a></li>
+      <li><a href="#93"><span class="n">93</span><span class="t">Wadi Rum <em>in the rain</em> with you</span></a></li>
+      <li><a href="#94"><span class="n">94</span><span class="t">When you <em>left your passport</em> in Amman and we were already in Petra</span></a></li>
+      <li><a href="#95"><span class="n">95</span><span class="t">When you let me put in an <em>OMI shift</em> at the conference</span></a></li>
+      <li><a href="#96"><span class="n">96</span><span class="t">The <em>Slimi collage</em> t-shirt you made me</span></a></li>
+      <li><a href="#97"><span class="n">97</span><span class="t">Travelling with you. You&#x27;re the <em>best travel partner</em> I&#x27;ve had</span></a></li>
+      <li><a href="#98"><span class="n">98</span><span class="t">Your love for an <em>adventure</em></span></a></li>
+      <li><a href="#99"><span class="n">99</span><span class="t">2026 was a hard year and <em>you still made it easy</em></span></a></li>
+      <li><a href="#100"><span class="n">100</span><span class="t">You always come back, even when I fuck up. <em>You&#x27;re better than me</em></span></a></li>
+      <li><a href="#101"><span class="n">101</span><span class="t">There is no number that finishes this. <em>I just stopped writing</em>.</span></a></li>
         </ol>
       </div>
     </details>
@@ -514,8 +527,10 @@ footer .mark{color:var(--red);font-size:13px}
   <ol class="tl">
 <li><span class="when">Jul 2023</span><span class="dot"></span><span class="what"><b>Marbella</b>A ferry, and a lot of trouble. The good kind.</span></li><li><span class="when">Oct 2024 – Sep 2025</span><span class="dot"></span><span class="what"><b>New York</b>The whole middle of it. Lunch breaks, the L train, walking everywhere.</span></li><li><span class="when">Feb 2025</span><span class="dot"></span><span class="what"><b>Paris</b>Your city. Your door, open.</span></li><li><span class="when">May 2025</span><span class="dot"></span><span class="what"><b>Miami</b>Sun, and you winking at the camera.</span></li><li><span class="when">Jul 2025</span><span class="dot"></span><span class="what"><b>Los Angeles &amp; Las Vegas</b>Beverly Hills, and whatever happened after.</span></li><li><span class="when">Nov 2025</span><span class="dot"></span><span class="what"><b>Amman</b>My people. You fit in like you had always been there.</span></li><li><span class="when">Dec 2025</span><span class="dot"></span><span class="what"><b>Dubai</b>New Year, the rooftop, all of us.</span></li><li><span class="when">Aug 2026</span><span class="dot"></span><span class="what"><b>Marbella</b>Where it started. The last time I saw you.</span></li>
   </ol>
+</div>
 
-  <div class="atlas-top spaced">
+<div class="panel" id="p-map" role="tabpanel">
+  <div class="atlas-top">
     <h2>Where we are</h2>
     <div class="gap">3,367 km<small>apart</small></div>
   </div>
@@ -537,14 +552,19 @@ footer .mark{color:var(--red);font-size:13px}
   <div class="atlas-top"><h2>How you talk</h2></div>
   <p class="tallyline">137,446 messages between us.
       60,375 of them yours.</p><ul class="lex"><li><span class="w">bro</span><span class="c">861</span><span class="g">What you called me more than anything else.</span></li><li><span class="w">🤍</span><span class="c">400</span><span class="g">Never a red one. Not once.</span></li><li><span class="w">oki</span><span class="c">381</span><span class="g">Counting okii, okiii and the rest.</span></li><li><span class="w">yess</span><span class="c">203</span><span class="g">More s&#x27;s for bigger news.</span></li><li><span class="w">don&#x27;t worry</span><span class="c">196</span><span class="g">Said like a job you were taking on.</span></li><li><span class="w">I love you</span><span class="c">181</span><span class="g">Out loud, in writing, where I could keep it.</span></li><li><span class="w">no way</span><span class="c">152</span><span class="g">Pure unfiltered shock, every time.</span></li><li><span class="w">khalas</span><span class="c">148</span><span class="g">End of discussion.</span></li><li><span class="w">inchaallah</span><span class="c">134</span><span class="g">Hopefully. Eventually. We&#x27;ll see.</span></li><li><span class="w">ily</span><span class="c">128</span><span class="g">When you couldn&#x27;t be bothered with the whole thing.</span></li><li><span class="w">miss you</span><span class="c">110</span><span class="g">More often than I deserved.</span></li><li><span class="w">hihi</span><span class="c">102</span><span class="g">When you were pleased with yourself.</span></li><li><span class="w">exact</span><span class="c">87</span><span class="g">One word. Full agreement. Conversation closed.</span></li><li><span class="w">wallah</span><span class="c">83</span><span class="g">I swear.</span></li><li><span class="w">bisous</span><span class="c">72</span><span class="g">The temperature of the whole thing was in which one you picked.</span></li><li><span class="w">good luck</span><span class="c">48</span><span class="g">Before every interview, every match, every time.</span></li><li><span class="w">yallah</span><span class="c">46</span><span class="g">Let&#x27;s go.</span></li><li><span class="w">habibi</span><span class="c">39</span><span class="g">My love.</span></li><li><span class="w">proud of you</span><span class="c">32</span><span class="g">About things that hadn&#x27;t earned it yet.</span></li><li><span class="w">sabah el nour</span><span class="c">10</span><span class="g">Good morning, the proper way.</span></li></ul>
+</div>
 
-  <div class="atlas-top spaced"><h2>Open when&hellip;</h2></div>
-  <div class="envs">
-<details class="env"><summary><span class="seal">&#9829;</span>Open when you miss me</summary><p>Then I&#x27;m missing you at the same time, which is most of the time. Go through the hundred. I meant all of them.</p></details><details class="env"><summary><span class="seal">&#9829;</span>Open when you can&#x27;t sleep</summary><p>Put the song on. Read one reason, not all of them. You always fell asleep on the phone anyway.</p></details><details class="env"><summary><span class="seal">&#9829;</span>Open when you&#x27;re annoyed with me</summary><p>You&#x27;re probably right. You usually were, and I took too long to say so.</p></details><details class="env"><summary><span class="seal">&#9829;</span>Open when it&#x27;s been a bad day</summary><p>Tell me about it properly, the long version, the way you do. I&#x27;ll still be listening.</p></details><details class="env"><summary><span class="seal">&#9829;</span>Open when you forget how good you are</summary><p>Read number fifty again. You knew what you deserved before I did.</p></details>
-  </div>
-
-  <div class="atlas-top spaced"><h2>What you are made of</h2></div>
+<div class="panel" id="p-you" role="tabpanel">
+  <div class="atlas-top"><h2>What you are made of</h2></div>
   <div class="fig"><div class="figwrap"><svg viewBox="-30 10 460 790" class="figsvg" xmlns="http://www.w3.org/2000/svg" aria-label="Tap any point"><defs><radialGradient id="halo" cx="50%" cy="46%" r="52%"><stop offset="0" stop-color="#8A3A33" stop-opacity=".07"/><stop offset="1" stop-color="#8A3A33" stop-opacity="0"/></radialGradient><filter id="twinkle" x="-70%" y="-70%" width="240%" height="240%"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><rect x="-30" y="10" width="460" height="790" fill="url(#halo)"/><circle cx="210" cy="633" r="1.0" fill="#8A3A33" opacity="0.15"/><circle cx="317" cy="555" r="1.3" fill="#8A3A33" opacity="0.14"/><circle cx="384" cy="209" r="1.3" fill="#8A3A33" opacity="0.17"/><circle cx="358" cy="630" r="1.3" fill="#8A3A33" opacity="0.24"/><circle cx="396" cy="325" r="1.3" fill="#8A3A33" opacity="0.11"/><circle cx="338" cy="685" r="0.8" fill="#8A3A33" opacity="0.24"/><circle cx="214" cy="629" r="1.3" fill="#8A3A33" opacity="0.13"/><circle cx="218" cy="691" r="1.3" fill="#8A3A33" opacity="0.11"/><circle cx="160" cy="406" r="1.0" fill="#8A3A33" opacity="0.20"/><circle cx="244" cy="539" r="1.0" fill="#8A3A33" opacity="0.23"/><circle cx="385" cy="34" r="1.0" fill="#8A3A33" opacity="0.19"/><circle cx="375" cy="582" r="0.8" fill="#8A3A33" opacity="0.25"/><circle cx="145" cy="609" r="1.0" fill="#8A3A33" opacity="0.14"/><circle cx="225" cy="748" r="1.3" fill="#8A3A33" opacity="0.25"/><circle cx="6" cy="69" r="1.0" fill="#8A3A33" opacity="0.13"/><circle cx="246" cy="442" r="1.3" fill="#8A3A33" opacity="0.24"/><circle cx="90" cy="254" r="1.0" fill="#8A3A33" opacity="0.15"/><circle cx="126" cy="711" r="1.3" fill="#8A3A33" opacity="0.23"/><circle cx="127" cy="58" r="1.0" fill="#8A3A33" opacity="0.10"/><circle cx="308" cy="380" r="0.8" fill="#8A3A33" opacity="0.22"/><circle cx="116" cy="77" r="1.3" fill="#8A3A33" opacity="0.25"/><circle cx="-11" cy="449" r="1.3" fill="#8A3A33" opacity="0.12"/><circle cx="193" cy="743" r="1.3" fill="#8A3A33" opacity="0.23"/><circle cx="61" cy="777" r="0.8" fill="#8A3A33" opacity="0.21"/><circle cx="379" cy="58" r="1.3" fill="#8A3A33" opacity="0.15"/><circle cx="371" cy="260" r="1.0" fill="#8A3A33" opacity="0.11"/><circle cx="387" cy="91" r="1.0" fill="#8A3A33" opacity="0.23"/><circle cx="269" cy="327" r="0.8" fill="#8A3A33" opacity="0.19"/><circle cx="219" cy="764" r="0.8" fill="#8A3A33" opacity="0.19"/><circle cx="97" cy="144" r="1.0" fill="#8A3A33" opacity="0.11"/><circle cx="371" cy="466" r="1.0" fill="#8A3A33" opacity="0.14"/><circle cx="159" cy="496" r="0.8" fill="#8A3A33" opacity="0.25"/><circle cx="311" cy="194" r="1.0" fill="#8A3A33" opacity="0.23"/><circle cx="407" cy="475" r="1.3" fill="#8A3A33" opacity="0.19"/><circle cx="209" cy="61" r="1.0" fill="#8A3A33" opacity="0.25"/><circle cx="54" cy="753" r="0.8" fill="#8A3A33" opacity="0.20"/><circle cx="142" cy="779" r="0.8" fill="#8A3A33" opacity="0.15"/><circle cx="136" cy="470" r="1.3" fill="#8A3A33" opacity="0.12"/><circle cx="-15" cy="736" r="1.3" fill="#8A3A33" opacity="0.19"/><circle cx="59" cy="372" r="1.3" fill="#8A3A33" opacity="0.12"/><circle cx="222" cy="364" r="1.0" fill="#8A3A33" opacity="0.14"/><circle cx="415" cy="648" r="1.0" fill="#8A3A33" opacity="0.15"/><circle cx="125" cy="59" r="0.8" fill="#8A3A33" opacity="0.18"/><circle cx="288" cy="41" r="1.0" fill="#8A3A33" opacity="0.21"/><circle cx="113" cy="175" r="0.8" fill="#8A3A33" opacity="0.22"/><circle cx="341" cy="769" r="1.0" fill="#8A3A33" opacity="0.19"/><circle cx="314" cy="189" r="1.3" fill="#8A3A33" opacity="0.10"/><circle cx="156" cy="113" r="0.8" fill="#8A3A33" opacity="0.22"/><circle cx="6" cy="761" r="1.0" fill="#8A3A33" opacity="0.14"/><circle cx="133" cy="433" r="1.0" fill="#8A3A33" opacity="0.16"/><circle cx="-17" cy="590" r="1.0" fill="#8A3A33" opacity="0.11"/><circle cx="310" cy="623" r="1.3" fill="#8A3A33" opacity="0.22"/><circle cx="105" cy="264" r="1.0" fill="#8A3A33" opacity="0.12"/><circle cx="348" cy="722" r="1.0" fill="#8A3A33" opacity="0.17"/><circle cx="92" cy="76" r="1.0" fill="#8A3A33" opacity="0.15"/><circle cx="68" cy="298" r="0.8" fill="#8A3A33" opacity="0.18"/><circle cx="409" cy="455" r="1.0" fill="#8A3A33" opacity="0.11"/><circle cx="173" cy="702" r="1.3" fill="#8A3A33" opacity="0.20"/><circle cx="376" cy="524" r="0.8" fill="#8A3A33" opacity="0.13"/><circle cx="215" cy="261" r="1.0" fill="#8A3A33" opacity="0.25"/><circle cx="159" cy="489" r="0.8" fill="#8A3A33" opacity="0.24"/><circle cx="46" cy="199" r="1.3" fill="#8A3A33" opacity="0.15"/><circle cx="314" cy="590" r="0.8" fill="#8A3A33" opacity="0.15"/><circle cx="87" cy="210" r="0.8" fill="#8A3A33" opacity="0.16"/><circle cx="260" cy="275" r="0.8" fill="#8A3A33" opacity="0.17"/><circle cx="371" cy="307" r="0.8" fill="#8A3A33" opacity="0.11"/><circle cx="111" cy="239" r="1.0" fill="#8A3A33" opacity="0.15"/><circle cx="404" cy="585" r="1.0" fill="#8A3A33" opacity="0.16"/><circle cx="123" cy="457" r="1.3" fill="#8A3A33" opacity="0.12"/><circle cx="26" cy="642" r="1.3" fill="#8A3A33" opacity="0.20"/><circle cx="375" cy="216" r="0.8" fill="#8A3A33" opacity="0.13"/><circle cx="362" cy="658" r="1.0" fill="#8A3A33" opacity="0.16"/><circle cx="396" cy="254" r="1.3" fill="#8A3A33" opacity="0.13"/><circle cx="119" cy="47" r="1.3" fill="#8A3A33" opacity="0.19"/><circle cx="135" cy="514" r="1.0" fill="#8A3A33" opacity="0.17"/><circle cx="94" cy="250" r="0.8" fill="#8A3A33" opacity="0.22"/><circle cx="74" cy="178" r="1.0" fill="#8A3A33" opacity="0.22"/><circle cx="291" cy="169" r="1.3" fill="#8A3A33" opacity="0.23"/><circle cx="11" cy="521" r="1.0" fill="#8A3A33" opacity="0.22"/><circle cx="324" cy="734" r="1.0" fill="#8A3A33" opacity="0.22"/><g stroke="#A89C80" stroke-width="1" stroke-linecap="round" opacity=".85"><line x1="200" y1="60" x2="200" y2="112"/><line x1="200" y1="112" x2="200" y2="154"/><line x1="200" y1="154" x2="200" y2="198"/><line x1="200" y1="198" x2="140" y2="238"/><line x1="200" y1="198" x2="260" y2="238"/><line x1="140" y1="238" x2="110" y2="332"/><line x1="260" y1="238" x2="290" y2="332"/><line x1="110" y1="332" x2="96" y2="432"/><line x1="290" y1="332" x2="304" y2="432"/><line x1="140" y1="238" x2="176" y2="292"/><line x1="176" y1="292" x2="200" y2="334"/><line x1="260" y1="238" x2="200" y2="334"/><line x1="200" y1="334" x2="200" y2="424"/><line x1="200" y1="424" x2="166" y2="548"/><line x1="200" y1="424" x2="234" y2="548"/><line x1="166" y1="548" x2="162" y2="668"/><line x1="234" y1="548" x2="238" y2="668"/><line x1="140" y1="238" x2="260" y2="238"/></g><g filter="url(#twinkle)"><circle cx="200" cy="60" r="2.6" fill="#8A3A33" opacity=".75"/></g><g filter="url(#twinkle)"><circle cx="200" cy="112" r="2.6" fill="#8A3A33" opacity=".75"/></g><g filter="url(#twinkle)"><circle cx="200" cy="154" r="2.6" fill="#8A3A33" opacity=".75"/></g><g filter="url(#twinkle)"><circle cx="200" cy="198" r="2.6" fill="#8A3A33" opacity=".75"/></g><g filter="url(#twinkle)"><circle cx="140" cy="238" r="2.6" fill="#8A3A33" opacity=".75"/></g><g filter="url(#twinkle)"><circle cx="176" cy="292" r="2.6" fill="#8A3A33" opacity=".75"/></g><g filter="url(#twinkle)"><circle cx="200" cy="334" r="2.6" fill="#8A3A33" opacity=".75"/></g><g filter="url(#twinkle)"><circle cx="110" cy="332" r="2.6" fill="#8A3A33" opacity=".75"/></g><g filter="url(#twinkle)"><circle cx="96" cy="432" r="2.6" fill="#8A3A33" opacity=".75"/></g><g filter="url(#twinkle)"><circle cx="166" cy="548" r="2.6" fill="#8A3A33" opacity=".75"/></g><g filter="url(#twinkle)"><circle cx="162" cy="668" r="2.6" fill="#8A3A33" opacity=".75"/></g><g filter="url(#twinkle)"><circle cx="290" cy="332" r="2.6" fill="#8A3A33" opacity=".75"/></g><g filter="url(#twinkle)"><circle cx="304" cy="432" r="2.6" fill="#8A3A33" opacity=".75"/></g><g filter="url(#twinkle)"><circle cx="234" cy="548" r="2.6" fill="#8A3A33" opacity=".75"/></g><g filter="url(#twinkle)"><circle cx="238" cy="668" r="2.6" fill="#8A3A33" opacity=".75"/></g><g filter="url(#twinkle)"><circle cx="260" cy="238" r="2.6" fill="#8A3A33" opacity=".75"/></g><g filter="url(#twinkle)"><circle cx="200" cy="424" r="2.6" fill="#8A3A33" opacity=".75"/></g><circle class="node" cx="290" cy="332" r="21" data-part="Your arms" tabindex="0" role="button"/><circle class="node" cx="304" cy="432" r="21" data-part="Your hands" tabindex="0" role="button"/><circle class="node" cx="234" cy="548" r="21" data-part="Your legs" tabindex="0" role="button"/><circle class="node" cx="238" cy="668" r="21" data-part="Your feet" tabindex="0" role="button"/><circle class="node" cx="260" cy="238" r="21" data-part="Your shoulders" tabindex="0" role="button"/><circle class="node" cx="200" cy="60" r="21" data-part="Your mind" tabindex="0" role="button"/><circle class="node" cx="200" cy="112" r="21" data-part="Your eyes" tabindex="0" role="button"/><circle class="node" cx="200" cy="154" r="21" data-part="Your face" tabindex="0" role="button"/><circle class="node" cx="200" cy="198" r="21" data-part="Your voice" tabindex="0" role="button"/><circle class="node" cx="140" cy="238" r="21" data-part="Your shoulders" tabindex="0" role="button"/><circle class="node" cx="176" cy="292" r="21" data-part="Your heart" tabindex="0" role="button"/><circle class="node" cx="200" cy="334" r="21" data-part="Your body" tabindex="0" role="button"/><circle class="node" cx="110" cy="332" r="21" data-part="Your arms" tabindex="0" role="button"/><circle class="node" cx="96" cy="432" r="21" data-part="Your hands" tabindex="0" role="button"/><circle class="node" cx="166" cy="548" r="21" data-part="Your legs" tabindex="0" role="button"/><circle class="node" cx="162" cy="668" r="21" data-part="Your feet" tabindex="0" role="button"/></svg></div><div class="figsay"><p class="what" id="partName">Tap a star</p><p class="why" id="partWhy">Every part of you is for something.</p><div class="chips"><button type="button" class="chip" data-part="Your mind">Your mind</button><button type="button" class="chip" data-part="Your eyes">Your eyes</button><button type="button" class="chip" data-part="Your face">Your face</button><button type="button" class="chip" data-part="Your voice">Your voice</button><button type="button" class="chip" data-part="Your shoulders">Your shoulders</button><button type="button" class="chip" data-part="Your heart">Your heart</button><button type="button" class="chip" data-part="Your body">Your body</button><button type="button" class="chip" data-part="Your arms">Your arms</button><button type="button" class="chip" data-part="Your hands">Your hands</button><button type="button" class="chip" data-part="Your legs">Your legs</button><button type="button" class="chip" data-part="Your feet">Your feet</button></div></div></div><script type="application/json" id="partData">{"Your mind": "the smartest person I have ever met", "Your eyes": "the first thing I noticed, every time", "Your face": "to kiss", "Your voice": "the one I fall asleep to", "Your shoulders": "to lean on, when it is your turn", "Your heart": "soft, and better than mine", "Your body": "to cuddle", "Your arms": "to hug", "Your hands": "to hold", "Your legs": "to walk the world with", "Your feet": "that kept showing up at airports"}</script>
+</div>
+
+<div class="panel" id="p-letters" role="tabpanel">
+  <div class="atlas-top"><h2>Open when&hellip;</h2></div>
+  <p class="sub">Ten of them. Each one opens.</p>
+  <div class="envs">
+<details class="env"><summary><span class="seal">&#9829;</span>Open when you miss me</summary><p>Then I&#x27;m missing you at the same time, which is most of the time, and usually at the stupid hours. Go through the list. I meant every one of them when I wrote it and I mean them now.</p></details><details class="env"><summary><span class="seal">&#9829;</span>Open when you can&#x27;t sleep</summary><p>Put the song on. Read one reason, not all of them — you&#x27;ll be asleep before the end. You always fell asleep on the phone anyway, mid-sentence, and I never once minded.</p></details><details class="env"><summary><span class="seal">&#9829;</span>Open when you&#x27;re annoyed with me</summary><p>You&#x27;re probably right. You usually were, and I took far too long to say so out loud. Be annoyed. It never made me love you less and it never will.</p></details><details class="env"><summary><span class="seal">&#9829;</span>Open when it&#x27;s been a bad day</summary><p>Tell me about it properly. The long version, the one with the timeline and the part about what the person actually said. I&#x27;ll still be listening the way I should have been listening all along.</p></details><details class="env"><summary><span class="seal">&#9829;</span>Open when you forget how good you are</summary><p>Read number fifty again, then read it twice. You knew what you deserved long before I understood it. That wasn&#x27;t you being difficult. That was you being right.</p></details><details class="env"><summary><span class="seal">&#9829;</span>Open when you&#x27;re about to do something big</summary><p>Interview, presentation, first day, hard conversation — you walk in and the room adjusts to you. It always has. My grandmother noticed it in a hallway in ten seconds.</p></details><details class="env"><summary><span class="seal">&#9829;</span>Open when you&#x27;re in Paris and it&#x27;s raining</summary><p>Make the tea. Put something terrible on, the kind of thing you&#x27;d watch and send me screenshots of at midnight. Not every day has to be useful.</p></details><details class="env"><summary><span class="seal">&#9829;</span>Open when someone is lucky to have you</summary><p>They will be, and they should know it faster than I did. I hope he books the table before you have to ask. That was never a big thing to want.</p></details><details class="env"><summary><span class="seal">&#9829;</span>Open when you want to know if it was real</summary><p>Three years, a hundred and one reasons, ninety-nine photographs, a hundred and thirty-seven thousand messages. It was real. There&#x27;s no version of this where it wasn&#x27;t.</p></details><details class="env"><summary><span class="seal">&#9829;</span>Open when it&#x27;s been a long time</summary><p>Then I hope you&#x27;re happy, and I hope it&#x27;s the uncomplicated kind. This page doesn&#x27;t need anything from you. It&#x27;s just here, and it stays here.</p></details>
+  </div>
 </div>
 
 <div class="panel" id="p-theo" role="tabpanel">
@@ -591,7 +611,7 @@ footer .mark{color:var(--red);font-size:13px}
 
 <script>
 (function () {
-  var reasons = ["The way you walk into a room smiling. Even my grandma noticed", "Your eyes", "Your smile", "Your laugh. It could make anyone fall in love with you", "Your face with makeup", "Your face without makeup", "Your body in a bikini", "Your body with nothing on", "You were a very cute baby", "Your beautiful soul", "The way you switch between French, English and Arabic mid-sentence", "You stop speaking English when you're tired", "When you say “exact”", "When you say hihihi", "You always use 🤍", "When you tell me ily out of nowhere", "Your voice notes where you're laughing so hard I can't understand a word", "“I'm home,” sent every time so I'd stop wondering", "“My door is open in Paris”", "You sleep anywhere and everywhere — flights, subways, car rides, my lap", "Being in lalaland when we're walking together", "Your love for food and the fact that you never actually eat", "The food you make always looks incredible and I never once got to try it", "You forget to eat and forget to drink water and I have to remind you about both", "When you're starving after work", "You're a boss lady, and people trust you blindly", "You want a real career. You're ambitious. You never wanted to be a stay-at-home Pilates mom", "You're building a life in Paris when you don't have to. You could be at home with your parents and you chose not to be", "You're so good at work", "You're very intelligent, and I get your opinion on everything before I do it", "You listen to my startup ideas even though you think they're stupid", "You keep pushing me", "“I'm proud of you,” said about things that hadn't earned it yet", "Your support for every single interview I've done", "You're cultured, and curious about every culture that isn't your own", "You're specific about what you like. Nothing about you is basic", "You don't follow trends, you set them", "You're always there for me — fighting or not, whether you hate me that week or not", "Even when you're mad at me you still say goodnight", "You're so invested in my life. My problems, my wins, and the stupid things", "The way you handle all my stupidity", "You're appreciative even when I haven't given you a reason to be", "You go with the flow even though I'm a terrible planner", "You were patient when I lost the car for 20 minutes", "When I got sick in Dubai and you took care of me", "The way you push me about the gym with zero mercy", "When you tell me I'm disgusting for sweating", "You're a beast at the gym", "The way you talk about your parents", "That you're literally Moroccan royalty", "You buy things for your mom before you buy anything for yourself. Always", "Your brothers, and the way you worry about all of them at once", "Being Theo's mom", "You love my mom", "My mom loves you", "How you blended into my life in Amman — my friends, my family, all of it", "How certain you are that you're right with your friends. And how often you actually are", "You love Palestine", "Your rings and your jewellery, all in the same colour family", "When you send me mirror selfies of your outfit", "When you ask me what colour to do your nails", "Your love of flowers", "That you want a special wedding ring", "Shopping with you", "You appreciate the gifts I get you even when you think they're stupid", "You know exactly what I like", "When you help me clean out my Instagram following", "When you send me a meme or a reel that's really a message you want to send me", "The stickers we make every time we're out", "Just hugging you", "Just kissing you", "Being close to you", "Sleeping next to you, even though I'm annoying and keep waking you up", "Sleeping in hotels with you", "Our endless mirror selfies", "Cuddling and watching stupid things together", "Having dinner with you, and then eating yours too", "Having drinks with you, back when you drank", "Dancing with you", "Driving with you", "You think I'm funny", "When you took edibles with me", "When you ask if I've met anyone, even though you know there's no one", "Even your cranky days", "Our first date. Best one I've had", "When you were the only person who was nice to me in Marbella", "That you came to Marbella anyway, even when we were falling apart", "Walking the streets of New York with you", "Sitting in New York parks with you", "Our lunch breaks in NYC", "Cycling Manhattan with you", "Universal Studios with you", "Wadi Rum in the rain with you", "When you left your passport in Amman and we were already in Petra", "When you let me put in an OMI shift at the conference", "The Slimi collage t-shirt you made me", "Travelling with you. You're the best travel partner I've had", "Your love for an adventure", "2026 was a hard year and you still made it easy", "You always come back, even when I fuck up. You're better than me", "There is no number that finishes this. I just stopped writing."];
+  var reasons = ["The way you <em>walk into a room smiling</em>. Even my grandma noticed", "Your <em>eyes</em>", "Your <em>smile</em>", "Your laugh. It could make anyone <em>fall in love</em> with you", "Your face <em>with makeup</em>", "Your face <em>without makeup</em>", "Your body in a <em>bikini</em>", "Your body with <em>nothing on</em>", "You were a <em>very cute baby</em>", "Your <em>beautiful soul</em>", "The way you switch between <em>French, English and Arabic</em> mid-sentence", "You stop speaking English <em>when you&#x27;re tired</em>", "When you say “<em>exact</em>”", "When you say <em>hihihi</em>", "You always use <em>🤍</em>", "When you tell me <em>ily</em> out of nowhere", "Your voice notes where you&#x27;re <em>laughing so hard</em> I can&#x27;t understand a word", "“<em>I&#x27;m home</em>,” sent every time so I&#x27;d stop wondering", "“<em>My door is open in Paris</em>”", "You sleep <em>anywhere and everywhere</em> — flights, subways, car rides, my lap", "Being in <em>lalaland</em> when we&#x27;re walking together", "Your love for food and the fact that you <em>never actually eat</em>", "The food you make always looks incredible and I <em>never once got to try it</em>", "You forget to eat and forget to drink water and I have to <em>remind you about both</em>", "When you&#x27;re <em>starving</em> after work", "You&#x27;re a <em>boss lady</em>, and people trust you blindly", "You want a real career. You&#x27;re <em>ambitious</em>. You never wanted to be a stay-at-home Pilates mom", "You&#x27;re building a life in Paris when you don&#x27;t have to. You could be at home with your parents and <em>you chose not to be</em>", "You&#x27;re <em>so good at work</em>", "You&#x27;re very intelligent, and I get <em>your opinion on everything</em> before I do it", "You listen to my startup ideas even though you think they&#x27;re <em>stupid</em>", "You <em>keep pushing me</em>", "“I&#x27;m proud of you,” said about things that <em>hadn&#x27;t earned it yet</em>", "Your support for <em>every single interview</em> I&#x27;ve done", "You&#x27;re cultured, and <em>curious</em> about every culture that isn&#x27;t your own", "You&#x27;re specific about what you like. <em>Nothing about you is basic</em>", "You don&#x27;t follow trends, <em>you set them</em>", "You&#x27;re always there for me — fighting or not, <em>whether you hate me that week or not</em>", "Even when you&#x27;re mad at me you <em>still say goodnight</em>", "You&#x27;re so invested in my life. My problems, my wins, and <em>the stupid things</em>", "The way you handle <em>all my stupidity</em>", "You&#x27;re appreciative even when I <em>haven&#x27;t given you a reason</em> to be", "You go with the flow even though I&#x27;m a <em>terrible planner</em>", "You were <em>patient</em> when I lost the car for 20 minutes", "When I got sick in Dubai and you <em>took care of me</em>", "The way you push me about the gym with <em>zero mercy</em>", "When you tell me I&#x27;m <em>disgusting</em> for sweating", "You&#x27;re a <em>beast</em> at the gym", "The way you talk about <em>your parents</em>", "That you&#x27;re literally <em>Moroccan royalty</em>", "You buy things for your mom before you buy anything for yourself. <em>Always</em>", "Your brothers, and the way you <em>worry about all of them at once</em>", "Being <em>Theo&#x27;s mom</em>", "You <em>love my mom</em>", "My mom <em>loves you</em>", "How you <em>blended into my life</em> in Amman — my friends, my family, all of it", "How certain you are that you&#x27;re right with your friends. And <em>how often you actually are</em>", "You love <em>Palestine</em>", "Your rings and your jewellery, all in the <em>same colour family</em>", "When you send me <em>mirror selfies</em> of your outfit", "When you ask me <em>what colour</em> to do your nails", "Your love of <em>flowers</em>", "That you want a <em>special</em> wedding ring", "<em>Shopping</em> with you", "You appreciate the gifts I get you even when <em>you think they&#x27;re stupid</em>", "You know <em>exactly what I like</em>", "When you help me clean out my <em>Instagram</em> following", "When you send me a meme or a reel that&#x27;s <em>really a message</em> you want to send me", "The <em>stickers</em> we make every time we&#x27;re out", "Just <em>hugging</em> you", "Just <em>kissing</em> you", "Being <em>close to you</em>", "Sleeping next to you, even though I&#x27;m annoying and <em>keep waking you up</em>", "Sleeping in <em>hotels</em> with you", "Our <em>endless</em> mirror selfies", "Cuddling and watching <em>stupid things together</em>", "Having dinner with you, and then <em>eating yours too</em>", "Having drinks with you, <em>back when you drank</em>", "<em>Dancing</em> with you", "<em>Driving</em> with you", "You think I&#x27;m <em>funny</em>", "When you took <em>edibles</em> with me", "When you ask if I&#x27;ve met anyone, even though you know <em>there&#x27;s no one</em>", "Even your <em>cranky days</em>", "Our first date. <em>Best one I&#x27;ve had</em>", "When you were the <em>only person who was nice to me</em> in Marbella", "That you <em>came to Marbella anyway</em>, even when we were falling apart", "<em>Walking the streets</em> of New York with you", "<em>Sitting</em> in New York parks with you", "Our <em>lunch breaks</em> in NYC", "<em>Cycling Manhattan</em> with you", "<em>Universal Studios</em> with you", "Wadi Rum <em>in the rain</em> with you", "When you <em>left your passport</em> in Amman and we were already in Petra", "When you let me put in an <em>OMI shift</em> at the conference", "The <em>Slimi collage</em> t-shirt you made me", "Travelling with you. You&#x27;re the <em>best travel partner</em> I&#x27;ve had", "Your love for an <em>adventure</em>", "2026 was a hard year and <em>you still made it easy</em>", "You always come back, even when I fuck up. <em>You&#x27;re better than me</em>", "There is no number that finishes this. <em>I just stopped writing</em>."];
   var photos  = ["01.jpg", "02.jpg", "03.jpg", "04.jpg", "05.jpg", "06.jpg", "07.jpg", "08.jpg", "09.jpg", "10.jpg", "11.jpg", "12.jpg", "13.jpg", "14.jpg", "15.jpg", "16.jpg", "17.jpg", "18.jpg", "19.jpg", "20.jpg", "21.jpg", "22.jpg", "23.jpg", "24.jpg", "25.jpg", "26.jpg", "27.jpg", "28.jpg", "29.jpg", "30.jpg", "31.jpg", "32.jpg", "33.jpg", "34.jpg", "35.jpg", "36.jpg", "37.jpg", "38.jpg", "39.jpg", "40.jpg", "41.jpg", "42.jpg", "43.jpg", "44.jpg", "45.jpg", "46.jpg", "47.jpg", "48.jpg", "49.jpg", "50.jpg", "51.jpg", "52.jpg", "53.jpg", "54.jpg", "55.jpg", "56.jpg", "57.jpg", "58.jpg", "59.jpg", "60.jpg", "61.jpg", "62.jpg", "63.jpg", "64.jpg", "65.jpg", "66.jpg", "67.jpg", "68.jpg", "69.jpg", "70.jpg", "71.jpg", "72.jpg", "73.jpg", "74.jpg", "75.jpg", "76.jpg", "77.jpg", "78.jpg", "79.jpg", "80.jpg", "81.jpg", "82.jpg", "83.jpg", "84.jpg", "85.jpg", "86.jpg", "87.jpg", "88.jpg", "89.jpg", "90.jpg", "91.jpg", "92.jpg", "93.jpg", "94.jpg", "95.jpg", "96.jpg", "97.jpg", "98.jpg", "99.jpg"];
   var ANSWERS = ["Wayan", "Wayan NYC", "Wayan New York", "Wayan Nolita", "Wayan restaurant"];
   var START   = "2023-07-17";
@@ -658,7 +678,7 @@ footer .mark{color:var(--red);font-size:13px}
   function paintLeaf(i, picked) {
     at = (i + reasons.length) % reasons.length;
     num.textContent = at + 1;
-    say.textContent = reasons[at];
+    say.innerHTML = reasons[at];
     folio.textContent = (at + 1) + ' ⁄ ' + reasons.length;
     label.textContent = (at === today && !picked) ? 'Today' : 'One of them';
   }
