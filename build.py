@@ -19,7 +19,7 @@ START = "2023-07-17"  # the Spain trip
 # Password gate. Leave ANSWERS empty to turn the gate off entirely.
 # Matching ignores case, spaces, punctuation and a leading "the".
 HINT = "Which restaurant in New York did we have our first date at?"
-ANSWERS = []
+ANSWERS = ["Wayan", "Wayan NYC", "Wayan New York", "Wayan Nolita", "Wayan restaurant"]
 
 reasons = [
     m.group(1)
