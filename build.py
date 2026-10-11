@@ -74,60 +74,154 @@ hero_img = (
 )
 
 
-def chart():
-    """The two of you and everywhere you went, plotted to scale.
+# What each part of her is for. (x, y on a 400x760 canvas, name, meaning)
+PARTS = [
+    (200,  60, "Your mind",      "the smartest person I have ever met"),
+    (200, 112, "Your eyes",      "the first thing I noticed, every time"),
+    (200, 154, "Your face",      "to kiss"),
+    (200, 198, "Your voice",     "the one I fall asleep to"),
+    (140, 238, "Your shoulders", "to lean on, when it is your turn"),
+    (176, 292, "Your heart",     "soft, and better than mine"),
+    (200, 334, "Your body",      "to cuddle"),
+    (110, 332, "Your arms",      "to hug"),
+    (96,  432, "Your hands",     "to hold"),
+    (166, 548, "Your legs",      "to walk the world with"),
+    (162, 668, "Your feet",      "that kept showing up at airports"),
+]
 
-    Latitude is stretched so the panel is a usable shape on a phone; the
-    relative positions and the ordering are true.
+# countries we were in together, drawn brighter than the rest
+LIT = {"France", "Jordan", "Spain", "United States of America",
+       "United Arab Emirates", "Morocco"}
+
+
+def chart():
+    """A real map: coastlines from Natural Earth, then our points on top.
+
+    Latitude is stretched a little so the panel is a usable shape on a phone.
     """
+    import json as _json
+    world = _json.loads((ROOT / "data" / "world.geo.json").read_text("utf-8"))
+
     pts = HOMES + PLACES
     lons = [p[2] for p in pts]; lats = [p[1] for p in pts]
     x0, x1 = min(lons) - 22, max(lons) + 22
     y0, y1 = min(lats) - 7, max(lats) + 9
+    W, H = 1000.0, 520.0
 
-    def X(lon): return (lon - x0) / (x1 - x0) * 100.0      # percent
-    def Y(lat): return (y1 - lat) / (y1 - y0) * 100.0
+    def X(lon): return (lon - x0) / (x1 - x0) * W
+    def Y(lat): return (y1 - lat) / (y1 - y0) * H
+    def PX(lon): return (lon - x0) / (x1 - x0) * 100.0
+    def PY(lat): return (y1 - lat) / (y1 - y0) * 100.0
 
-    W, H = 1000.0, 520.0                                   # viewBox, 16:8.3
-    sx, sy = W / 100.0, H / 100.0
+    def rings(geom):
+        if geom["type"] == "Polygon":
+            return [geom["coordinates"][0]]
+        if geom["type"] == "MultiPolygon":
+            return [poly[0] for poly in geom["coordinates"]]
+        return []
+
+    land, lit = [], []
+    for f in world["features"]:
+        name = f["properties"]["name"]
+        for ring in rings(f["geometry"]):
+            if len(ring) < 4:
+                continue
+            if not any(x0 - 25 < c[0] < x1 + 25 and y0 - 25 < c[1] < y1 + 25 for c in ring):
+                continue
+            d, last = [], None
+            for lon, lat in ring:
+                x, y = X(lon), Y(lat)
+                if last and abs(x - last[0]) < 1.1 and abs(y - last[1]) < 1.1:
+                    continue          # thin out dense coastline
+                d.append(f"{'M' if not last else 'L'}{x:.1f},{y:.1f}")
+                last = (x, y)
+            if len(d) > 3:
+                (lit if name in LIT else land).append("".join(d) + "Z")
 
     svg = [f'<svg viewBox="0 0 {W:.0f} {H:.0f}" preserveAspectRatio="none" '
-           f'aria-hidden="true" xmlns="http://www.w3.org/2000/svg">']
+           f'aria-hidden="true" xmlns="http://www.w3.org/2000/svg">',
+           f'<rect width="{W:.0f}" height="{H:.0f}" fill="#0C0B0A"/>']
+
     g = []
     lon = -180
     while lon <= 180:
-        if x0 < lon < x1:
-            g.append(f'<line x1="{X(lon)*sx:.1f}" y1="0" x2="{X(lon)*sx:.1f}" y2="{H:.0f}"/>')
+        if x0 < lon < x1: g.append(f'<line x1="{X(lon):.1f}" y1="0" x2="{X(lon):.1f}" y2="{H:.0f}"/>')
         lon += 20
     lat = -80
     while lat <= 80:
-        if y0 < lat < y1:
-            g.append(f'<line x1="0" y1="{Y(lat)*sy:.1f}" x2="{W:.0f}" y2="{Y(lat)*sy:.1f}"/>')
+        if y0 < lat < y1: g.append(f'<line x1="0" y1="{Y(lat):.1f}" x2="{W:.0f}" y2="{Y(lat):.1f}"/>')
         lat += 10
-    svg.append('<g stroke="#232020" stroke-width="1.2">' + "".join(g) + '</g>')
+    svg.append('<g stroke="#1B1917" stroke-width="1">' + "".join(g) + "</g>")
 
-    ax, ay = X(HOMES[0][2]) * sx, Y(HOMES[0][1]) * sy
-    bx, by = X(HOMES[1][2]) * sx, Y(HOMES[1][1]) * sy
-    mx, my = (ax + bx) / 2, (ay + by) / 2 - abs(bx - ax) * 0.42
+    svg.append(f'<g fill="#201D1A" stroke="#302B26" stroke-width="1" '
+               f'vector-effect="non-scaling-stroke"><path d="{" ".join(land)}"/></g>')
+    svg.append(f'<g fill="#2C2A25" stroke="#5E5847" stroke-width="1.2" '
+               f'vector-effect="non-scaling-stroke"><path d="{" ".join(lit)}"/></g>')
+
+    ax, ay = X(HOMES[0][2]), Y(HOMES[0][1])
+    bx, by = X(HOMES[1][2]), Y(HOMES[1][1])
+    mx, my = (ax + bx) / 2, (ay + by) / 2 - abs(bx - ax) * 0.45
     svg.append(f'<path d="M{ax:.1f},{ay:.1f} Q{mx:.1f},{my:.1f} {bx:.1f},{by:.1f}" '
                f'fill="none" stroke="#C7A75F" stroke-width="2.5" stroke-dasharray="4 10" '
-               f'opacity=".8" vector-effect="non-scaling-stroke"/>')
-    for p, colour, r in ([(p, "#7EA8B8", 7) for p in PLACES] +
-                         [(p, "#C7A75F", 11) for p in HOMES]):
-        svg.append(f'<circle cx="{X(p[2])*sx:.1f}" cy="{Y(p[1])*sy:.1f}" r="{r}" '
-                   f'fill="{colour}" fill-opacity=".95"/>')
-    svg.append('</svg>')
+               f'opacity=".9" vector-effect="non-scaling-stroke"/>')
+    for p, colour, r in ([(q, "#7EA8B8", 7) for q in PLACES] +
+                         [(q, "#C7A75F", 11) for q in HOMES]):
+        svg.append(f'<circle cx="{X(p[2]):.1f}" cy="{Y(p[1]):.1f}" r="{r}" fill="{colour}" '
+                   f'stroke="#0C0B0A" stroke-width="2"/>')
+    svg.append("</svg>")
 
-    # labels are real text, so they stay readable at any width
-    tags = []
-    for p, cls in ([(p, "there") for p in PLACES] + [(p, "home") for p in HOMES]):
-        label, lat_, lon_, side = p
-        tags.append(f'<span class="pin {cls} {side}" '
-                    f'style="left:{X(lon_):.2f}%;top:{Y(lat_):.2f}%">'
-                    f'{html.escape(label)}</span>')
-    arc = (f'<span class="pin gap" style="left:{(X(HOMES[0][2])+X(HOMES[1][2]))/2:.2f}%;'
-           f'top:{min(Y(HOMES[0][1]),Y(HOMES[1][1])) - 13:.2f}%">{APART:,} km</span>')
-    return '<div class="plot">' + "".join(svg) + "".join(tags) + arc + '</div>'
+    tags = [f'<span class="pin {cls} {p[3]}" style="left:{PX(p[2]):.2f}%;top:{PY(p[1]):.2f}%">'
+            f'{html.escape(p[0])}</span>'
+            for p, cls in ([(q, "there") for q in PLACES] + [(q, "home") for q in HOMES])]
+    tags.append(f'<span class="pin gap" style="left:{(PX(HOMES[0][2])+PX(HOMES[1][2]))/2:.2f}%;'
+                f'top:{min(PY(HOMES[0][1]),PY(HOMES[1][1])) - 13:.2f}%">{APART:,} km</span>')
+    return '<div class="plot">' + "".join(svg) + "".join(tags) + "</div>"
+
+
+def figure():
+    """A constellation of her: points joined by lines, each one tappable."""
+    node = {(x, y): (name, why) for x, y, name, why in PARTS}
+    # mirrored points share a meaning with their twin
+    twins = {(290, 332): "Your arms", (304, 432): "Your hands",
+             (234, 548): "Your legs", (238, 668): "Your feet",
+             (260, 238): "Your shoulders"}
+    bones = [
+        ((200, 60), (200, 112)), ((200, 112), (200, 154)),
+        ((200, 154), (200, 198)), ((200, 198), (140, 238)),
+        ((200, 198), (260, 238)), ((140, 238), (110, 332)),
+        ((260, 238), (290, 332)), ((110, 332), (96, 432)),
+        ((290, 332), (304, 432)), ((140, 238), (176, 292)),
+        ((176, 292), (200, 334)), ((260, 238), (200, 334)),
+        ((200, 334), (200, 424)), ((200, 424), (166, 548)),
+        ((200, 424), (234, 548)), ((166, 548), (162, 668)),
+        ((234, 548), (238, 668)),
+    ]
+    out = ['<svg viewBox="0 0 400 760" class="figsvg" '
+           'xmlns="http://www.w3.org/2000/svg" aria-label="Tap any point">']
+    out.append('<g stroke="#4A4237" stroke-width="1.4" stroke-linecap="round">' +
+               "".join(f'<line x1="{a[0]}" y1="{a[1]}" x2="{b[0]}" y2="{b[1]}"/>'
+                       for a, b in bones) + "</g>")
+    quiet = [(200, 424), (260, 238), (290, 332), (304, 432), (234, 548), (238, 668)]
+    for x, y in quiet:
+        label = twins.get((x, y))
+        if label:
+            out.append(f'<circle class="node" cx="{x}" cy="{y}" r="22" '
+                       f'data-part="{html.escape(label)}" tabindex="0" role="button"/>')
+        else:
+            out.append(f'<circle cx="{x}" cy="{y}" r="4.5" fill="#4A4237"/>')
+    for x, y, name, why in PARTS:
+        out.append(f'<circle class="node" cx="{x}" cy="{y}" r="22" '
+                   f'data-part="{html.escape(name)}" tabindex="0" role="button"/>')
+    out.append("</svg>")
+    say = "".join(
+        f'<button type="button" class="chip" data-part="{html.escape(n)}">{html.escape(n)}</button>'
+        for _, _, n, _ in PARTS)
+    data = json.dumps({n: w for _, _, n, w in PARTS}, ensure_ascii=False)
+    return ('<div class="fig"><div class="figwrap">' + "".join(out) +
+            '</div><div class="figsay"><p class="what" id="partName">Tap any point</p>'
+            '<p class="why" id="partWhy">Every part of you is for something.</p>'
+            '<div class="chips">' + say + '</div></div></div>'
+            '<script type="application/json" id="partData">' + data + '</script>')
 
 
 TEMPLATE = r"""<!doctype html>
@@ -261,7 +355,9 @@ h1 .it{font-style:italic;display:block;color:var(--brass)}
 .index .panel{padding-bottom:30px}
 
 /* ---- the song ---- */
-.tune{max-width:820px;margin:0 auto;padding:0 24px clamp(44px,8vw,78px)}
+.tune{max-width:820px;margin:0 auto;padding:0 24px clamp(40px,7vw,64px)}
+.tune .lead{margin:0 0 16px;font-family:var(--display);font-style:italic;
+  font-size:clamp(17px,3.4vw,22px);color:var(--brass)}
 .tune .frame{border:1px solid var(--rule);border-radius:4px;overflow:hidden;
   background:var(--raise);box-shadow:var(--shadow)}
 .tune .screen{position:relative;aspect-ratio:16/9;background:#000}
@@ -312,6 +408,46 @@ h1 .it{font-style:italic;display:block;color:var(--brass)}
 .legend i{width:9px;height:9px;border-radius:50%;display:inline-block;
   margin-right:8px;vertical-align:1px}
 
+/* ---- say something back ---- */
+.post{max-width:820px;margin:0 auto;padding:0 24px clamp(44px,8vw,78px)}
+.post h2{font-family:var(--display);font-weight:400;font-style:italic;
+  font-size:clamp(24px,4.4vw,34px);margin:0 0 6px}
+.post .sub{margin:0 0 18px;color:var(--faint);font-size:13.5px;max-width:52ch}
+.post textarea{width:100%;background:var(--raise);border:1px solid var(--rule);
+  border-radius:4px;color:var(--ink);font-family:var(--ui);font-size:16px;
+  line-height:1.6;padding:16px;resize:vertical}
+.post textarea::placeholder{color:var(--faint)}
+.postrow{display:flex;align-items:center;gap:16px;margin-top:14px;flex-wrap:wrap}
+.postrow button{font-family:var(--ui);font-size:14px;font-weight:600;
+  color:#131110;background:var(--brass);border:0;border-radius:999px;
+  padding:12px 22px;cursor:pointer}
+.postrow a{color:var(--brass);font-size:13.5px;text-decoration:none;
+  border-bottom:1px solid rgba(199,167,95,.3);padding-bottom:2px}
+.postrow a:hover{border-bottom-color:var(--brass)}
+.postrow .said{font-size:13px;color:var(--dim)}
+
+/* ---- what you are made of ---- */
+.parts{max-width:1120px;margin:0 auto;padding:0 24px clamp(44px,8vw,78px)}
+.fig{display:flex;gap:clamp(22px,5vw,60px);align-items:center;flex-wrap:wrap;
+  border:1px solid var(--rule);border-radius:4px;background:#0C0B0A;
+  padding:clamp(22px,4vw,40px)}
+.figwrap{flex:0 0 auto;width:clamp(180px,34vw,260px);margin:0 auto}
+.figsvg{display:block;width:100%;height:auto;overflow:visible}
+.figsvg .node{fill:#C7A75F;fill-opacity:.28;stroke:#C7A75F;stroke-width:1.5;
+  stroke-opacity:.5;cursor:pointer;transition:fill-opacity .18s,stroke-opacity .18s}
+.figsvg .node:hover{fill-opacity:.5;stroke-opacity:1}
+.figsvg .node.on{fill-opacity:.85;stroke-opacity:1}
+.figsay{flex:1 1 260px;min-width:0}
+.figsay .what{font-family:var(--display);font-size:clamp(24px,5vw,38px);
+  color:var(--brass);margin:0 0 6px;line-height:1.1}
+.figsay .why{font-family:var(--display);font-style:italic;
+  font-size:clamp(18px,3.6vw,25px);margin:0 0 24px;line-height:1.3;color:var(--ink)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-family:var(--ui);font-size:12.5px;color:var(--dim);background:none;
+  border:1px solid var(--rule);border-radius:999px;padding:7px 14px;cursor:pointer;
+  transition:color .16s,border-color .16s}
+.chip:hover,.chip.on{color:var(--brass);border-color:var(--brass)}
+
 footer{border-top:1px solid var(--rule);max-width:1120px;margin:0 auto;
   padding:34px 24px calc(50px + env(safe-area-inset-bottom,0px));
   display:flex;justify-content:space-between;align-items:center;gap:16px;
@@ -352,16 +488,34 @@ body.locked{overflow:hidden}
   </div>
 </div>
 
-<header class="plate">
-  __HERO__
-  <p class="tally"><span id="tally"></span><span class="tap">tap for the next</span></p>
-</header>
-
 <div class="title">
   <p class="kicker">For Selma</p>
   <h1>One hundred<span class="it">reasons</span></h1>
   <p class="since" id="since"></p>
 </div>
+
+<section class="tune">
+  <p class="lead">Press play first. Then read the rest with it on.</p>
+  <div class="frame">
+    <div class="screen" id="screen">
+      <button type="button" class="poster" id="poster" aria-label="Play the song">
+        <img src="https://i.ytimg.com/vi/__SONG_ID__/maxresdefault.jpg" alt=""
+             onerror="this.src='https://i.ytimg.com/vi/__SONG_ID__/hqdefault.jpg'">
+        <span class="play">&#9654;</span>
+      </button>
+    </div>
+    <div class="bar">
+      <span class="t">__SONG_LABEL__</span>
+      <span class="by">__SONG_BY__</span>
+      <span class="cue">Press play</span>
+    </div>
+  </div>
+</section>
+
+<header class="plate">
+  __HERO__
+  <p class="tally"><span id="tally"></span><span class="tap">tap for the next</span></p>
+</header>
 
 <section class="book">
   <div class="book-top"><span class="label" id="deckLabel">Today</span><span class="line"></span></div>
@@ -380,21 +534,32 @@ body.locked{overflow:hidden}
   </div>
 </section>
 
-<section class="tune">
-  <div class="frame">
-    <div class="screen" id="screen">
-      <button type="button" class="poster" id="poster" aria-label="Play the song">
-        <img src="https://i.ytimg.com/vi/__SONG_ID__/maxresdefault.jpg" alt=""
-             onerror="this.src='https://i.ytimg.com/vi/__SONG_ID__/hqdefault.jpg'">
-        <span class="play">&#9654;</span>
-      </button>
+<section class="index">
+  <details id="allOfThem">
+    <summary><h2>All of them</h2><span class="meta">100</span></summary>
+    <div class="panel">
+      <ol>
+__ROWS__
+      </ol>
     </div>
-    <div class="bar">
-      <span class="t">__SONG_LABEL__</span>
-      <span class="by">__SONG_BY__</span>
-      <span class="cue">Press play</span>
-    </div>
+  </details>
+</section>
+
+<section class="post">
+  <h2>Say something back</h2>
+  <p class="sub">Write it here, then send it to me. Nothing on this page can reach
+    me on its own.</p>
+  <textarea id="note" rows="5" placeholder="Whatever you want."></textarea>
+  <div class="postrow">
+    <button type="button" id="copyNote">Copy it</button>
+    <a id="mailNote" href="#">Open it in mail</a>
+    <span class="said" id="said" role="status"></span>
   </div>
+</section>
+
+<section class="parts">
+  <div class="atlas-top"><h2>What you are made of</h2></div>
+  __FIGURE__
 </section>
 
 <section class="atlas">
@@ -405,19 +570,8 @@ body.locked{overflow:hidden}
   <figure>__CHART__</figure>
   <p class="legend">
     <span><i style="background:#C7A75F"></i>The two of us</span>
-    <span><i style="background:#7EA8B8"></i>Places we went together</span>
+    <span><i style="background:#7EA8B8"></i>Everywhere we went together</span>
   </p>
-</section>
-
-<section class="index">
-  <details id="allOfThem">
-    <summary><h2>All of them</h2><span class="meta">100</span></summary>
-    <div class="panel">
-      <ol>
-__ROWS__
-      </ol>
-    </div>
-  </details>
 </section>
 
 <footer>
@@ -600,6 +754,54 @@ __ROWS__
     });
   }
 
+  /* ---------- say something back ---------- */
+  var note = document.getElementById('note');
+  var said = document.getElementById('said');
+  if (note) {
+    document.getElementById('copyNote').addEventListener('click', function () {
+      var text = note.value.trim();
+      if (!text) { note.focus(); return; }
+      function fallback() {
+        note.select();
+        try { document.execCommand('copy'); said.textContent = 'Copied.'; }
+        catch (e) { said.textContent = 'Select it and copy.'; }
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text)
+          .then(function () { said.textContent = 'Copied. Now send it to me.'; })
+          .catch(fallback);
+      } else { fallback(); }
+    });
+    document.getElementById('mailNote').addEventListener('click', function (e) {
+      e.preventDefault();
+      window.location.href = 'mailto:sufiansartawi8@gmail.com'
+        + '?subject=' + encodeURIComponent('Back at you')
+        + '&body=' + encodeURIComponent(note.value);
+    });
+  }
+
+  /* ---------- what you are made of ---------- */
+  var meanings = {};
+  try { meanings = JSON.parse(document.getElementById('partData').textContent); }
+  catch (e) {}
+  var partName = document.getElementById('partName');
+  var partWhy = document.getElementById('partWhy');
+  var allHits = Array.prototype.slice.call(document.querySelectorAll('[data-part]'));
+  function pick(name) {
+    if (!meanings[name]) return;
+    partName.textContent = name;
+    partWhy.textContent = meanings[name];
+    allHits.forEach(function (el) {
+      el.classList.toggle('on', el.dataset.part === name);
+    });
+  }
+  allHits.forEach(function (el) {
+    el.addEventListener('click', function () { pick(el.dataset.part); });
+    el.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); pick(el.dataset.part); }
+    });
+  });
+
   paintLeaf(at, false);
   if (location.hash && location.hash !== '#lock') fromHash();
 })();
@@ -622,6 +824,7 @@ out = (
     .replace("__PLACES__", json.dumps(PLACES, ensure_ascii=False))
     .replace("__APART__", f"{APART:,}")
     .replace("__CHART__", chart())
+    .replace("__FIGURE__", figure())
     .replace("__ANSWERS__", json.dumps(ANSWERS))
     .replace("__FIRST__", html.escape(reasons[0]))
 )
