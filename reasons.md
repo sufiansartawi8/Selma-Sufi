@@ -2,75 +2,75 @@
 
 1. The way you *walk into a room smiling*. Even my grandma noticed
 2. Your *eyes*
-3. Your *smile*
-4. Your laugh. It could make anyone *fall in love* with you
-5. Your face *with makeup*
-6. Your face *without makeup*
-7. Your body in a *bikini*
-8. Your body with *nothing on*
-9. You were a *very cute baby*
-10. Your *beautiful soul*
-11. The way you switch between *French, English and Arabic* mid-sentence
-12. You stop speaking English *when you're tired*
-13. When you say “*exact*”
-14. When you say *hihihi*
-15. You always use *🤍*
-16. When you tell me *ily* out of nowhere
-17. Your voice notes where you're *laughing so hard* I can't understand a word
-18. “*I'm home*,” sent every time so I'd stop wondering
-19. “*My door is open in Paris*”
-20. You sleep *anywhere and everywhere* — flights, subways, car rides, my lap
-21. Being in *lalaland* when we're walking together
-22. Your love for food and the fact that you *never actually eat*
-23. The food you make always looks incredible and I *never once got to try it*
-24. You forget to eat and forget to drink water and I have to *remind you about both*
-25. When you're *starving* after work
-26. You're a *boss lady*, and people trust you blindly
-27. You want a real career. You're *ambitious*. You never wanted to be a stay-at-home Pilates mom
-28. You're building a life in Paris when you don't have to. You could be at home with your parents and *you chose not to be*
-29. You're *so good at work*
-30. You're very intelligent, and I get *your opinion on everything* before I do it
-31. You listen to my startup ideas even though you think they're *stupid*
-32. You *keep pushing me*
-33. “I'm proud of you,” said about things that *hadn't earned it yet*
-34. Your support for *every single interview* I've done
-35. You're cultured, and *curious* about every culture that isn't your own
-36. You're specific about what you like. *Nothing about you is basic*
-37. You don't follow trends, *you set them*
-38. You're always there for me — fighting or not, *whether you hate me that week or not*
-39. Even when you're mad at me you *still say goodnight*
-40. You're so invested in my life. My problems, my wins, and *the stupid things*
-41. The way you handle *all my stupidity*
-42. You're appreciative even when I *haven't given you a reason* to be
-43. You go with the flow even though I'm a *terrible planner*
-44. You were *patient* when I lost the car for 20 minutes
-45. When I got sick in Dubai and you *took care of me*
-46. The way you push me about the gym with *zero mercy*
-47. When you tell me I'm *disgusting* for sweating
-48. You're a *beast* at the gym
-49. The way you talk about *your parents*
-50. That you're literally *Moroccan royalty*
-51. You buy things for your mom before you buy anything for yourself. *Always*
-52. Your brothers, and the way you *worry about all of them at once*
-53. Being *Theo's mom*
-54. You *love my mom*
-55. My mom *loves you*
-56. How you *blended into my life* in Amman — my friends, my family, all of it
-57. How certain you are that you're right with your friends. And *how often you actually are*
-58. You love *Palestine*
-59. Your rings and your jewellery, all in the *same colour family*
-60. When you send me *mirror selfies* of your outfit
-61. When you ask me *what colour* to do your nails
-62. Your love of *flowers*
-63. That you want a *special* wedding ring
-64. *Shopping* with you
-65. You appreciate the gifts I get you even when *you think they're stupid*
-66. You know *exactly what I like*
-67. When you help me clean out my *Instagram* following
-68. When you send me a meme or a reel that's *really a message* you want to send me
-69. The *stickers* we make every time we're out
-70. Just *hugging* you
-71. Just *kissing* you
+3. Your laugh. It could make anyone *fall in love* with you
+4. Your face *with makeup*
+5. Your face *without makeup*
+6. Your body in a *bikini*
+7. Your body with *nothing on*
+8. You were a *very cute baby*
+9. Your *beautiful soul*
+10. The way you switch between *French, English and Arabic* mid-sentence
+11. You stop speaking English *when you're tired*
+12. When you say “*exact*”
+13. When you say *hihihi*
+14. You always use *🤍*
+15. When you tell me *ily* out of nowhere
+16. Your voice notes where you're *laughing so hard* I can't understand a word
+17. “*I'm home*,” sent every time so I'd stop wondering
+18. “*My door is open in Paris*”
+19. You sleep *anywhere and everywhere* — flights, subways, car rides, my lap
+20. Being in *lalaland* when we're walking together
+21. Your love for food and the fact that you *never actually eat*
+22. The food you make always looks incredible and I *never once got to try it*
+23. You forget to eat and forget to drink water and I have to *remind you about both*
+24. When you're *starving* after work
+25. You're a *boss lady*, and people trust you blindly
+26. You want a real career. You're *ambitious*. You never wanted to be a stay-at-home Pilates mom
+27. You're building a life in Paris when you don't have to. You could be at home with your parents and *you chose not to be*
+28. You're *so good at work*
+29. You're very intelligent, and I get *your opinion on everything* before I do it
+30. You listen to my startup ideas even though you think they're *stupid*
+31. You *keep pushing me*
+32. “I'm proud of you,” said about things that *hadn't earned it yet*
+33. Your support for *every single interview* I've done
+34. You're cultured, and *curious* about every culture that isn't your own
+35. You're specific about what you like. *Nothing about you is basic*
+36. You don't follow trends, *you set them*
+37. You're always there for me — fighting or not, *whether you hate me that week or not*
+38. Even when you're mad at me you *still say goodnight*
+39. You're so invested in my life. My problems, my wins, and *the stupid things*
+40. The way you handle *all my stupidity*
+41. You're appreciative even when I *haven't given you a reason* to be
+42. You go with the flow even though I'm a *terrible planner*
+43. You were *patient* when I lost the car for 20 minutes
+44. When I got sick in Dubai and you *took care of me*
+45. The way you push me about the gym with *zero mercy*
+46. When you tell me I'm *disgusting* for sweating
+47. You're a *beast* at the gym
+48. The way you talk about *your parents*
+49. That you're literally *Moroccan royalty*
+50. You buy things for your mom before you buy anything for yourself. *Always*
+51. Your brothers, and the way you *worry about all of them at once*
+52. Being *Theo's mom*
+53. You *love my mom*
+54. My mom *loves you*
+55. How you *blended into my life* in Amman — my friends, my family, all of it
+56. How certain you are that you're right with your friends. And *how often you actually are*
+57. You love *Palestine*
+58. Your rings and your jewellery, all in the *same colour family*
+59. When you send me *mirror selfies* of your outfit
+60. When you ask me *what colour* to do your nails
+61. Your love of *flowers*
+62. That you want a *special* wedding ring
+63. *Shopping* with you
+64. You appreciate the gifts I get you even when *you think they're stupid*
+65. You know *exactly what I like*
+66. When you help me clean out my *Instagram* following
+67. When you send me a meme or a reel that's *really a message* you want to send me
+68. The *stickers* we make every time we're out
+69. Just *hugging* you
+70. Just *kissing* you
+71. *S E X* with you
 72. Being *close to you*
 73. Sleeping next to you, even though I'm annoying and *keep waking you up*
 74. Sleeping in *hotels* with you
