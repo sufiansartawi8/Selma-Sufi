@@ -16,28 +16,29 @@ SITE = ROOT / "site"
 EXTS = {".jpg", ".jpeg", ".png", ".webp", ".avif", ".gif"}
 START = "2023-07-17"  # the Spain trip
 
-# Password gate. Leave ANSWERS empty to turn the gate off entirely.
+# Password gate. She is asked on every visit; nothing is remembered.
 # Matching ignores case, spaces, punctuation and a leading "the".
-# A link out to the song. Hosting the recording would be piracy; this sends
-# her to the real thing. Swap SONG_URL for a direct link any time.
+HINT = "Which restaurant in New York did we have our first date at?"
+ANSWERS = ["Wayan", "Wayan NYC", "Wayan New York", "Wayan Nolita", "Wayan restaurant"]
+
+# The song. Hosting the recording would be piracy; this sends
 SONG_LABEL = "Hey There Delilah"
 SONG_ID = "h_m-BjrxmgI"          # YouTube video id
 SONG_BY = "Plain White T's"
 
-# Map. HOMES are the two of you; PLACES are everywhere you went together.
-# Edit freely — label, latitude, longitude.
+# Map. Drawn as a diagram, no tiles and no API.
+# (label, lat, lon, which side the label sits on)
 HOMES = [
-    ("Selma \u2014 Paris", 48.8566, 2.3522),
-    ("Sufyan \u2014 Amman", 31.9454, 35.9284),
+    ("Selma \u2014 Paris", 48.8566, 2.3522, "left"),
+    ("Sufyan \u2014 Amman", 31.9454, 35.9284, "right"),
 ]
 PLACES = [
-    ("Marbella, Spain", 36.5101, -4.8824),
-    ("New York, USA", 40.7128, -74.0060),
-    ("Miami, USA", 25.7907, -80.1300),
-    ("Los Angeles, USA", 34.0736, -118.4004),
-    ("Dubai, UAE", 25.1972, 55.2744),
-    ("Petra, Jordan", 30.3285, 35.4444),
-    ("Wadi Rum, Jordan", 29.5765, 35.4204),
+    ("Marbella", 36.5101, -4.8824, "left"),
+    ("New York", 40.7128, -74.0060, "left"),
+    ("Miami", 25.7907, -80.1300, "below"),
+    ("Los Angeles", 34.0736, -118.4004, "right"),
+    ("Dubai", 25.1972, 55.2744, "below"),
+    ("Petra & Wadi Rum", 29.9000, 35.4300, "below"),
 ]
 
 def _km(a, b):
@@ -48,9 +49,6 @@ def _km(a, b):
     return 2 * 6371 * math.asin(math.sqrt(h))
 
 APART = round(_km((HOMES[0][1], HOMES[0][2]), (HOMES[1][1], HOMES[1][2])))
-
-HINT = "Which restaurant in New York did we have our first date at?"
-ANSWERS = ["Wayan", "Wayan NYC", "Wayan New York", "Wayan Nolita", "Wayan restaurant"]
 
 reasons = [
     m.group(1)
@@ -71,15 +69,66 @@ index_rows = "\n".join(
     for i, t in enumerate(reasons, 1)
 )
 
-strip = "\n".join(
-    f'      <button type="button" class="thumb" data-i="{i}" aria-label="Photo {i + 1}">'
-    f'<img src="photos/{html.escape(p)}" alt="" loading="lazy" decoding="async"></button>'
-    for i, p in enumerate(photos)
-)
-
 hero_img = (
     f'<img id="hero" src="photos/{html.escape(photos[0])}" alt="Us">' if photos else ""
 )
+
+
+def chart():
+    """The two of you and everywhere you went, plotted to scale.
+
+    Latitude is stretched so the panel is a usable shape on a phone; the
+    relative positions and the ordering are true.
+    """
+    pts = HOMES + PLACES
+    lons = [p[2] for p in pts]; lats = [p[1] for p in pts]
+    x0, x1 = min(lons) - 22, max(lons) + 22
+    y0, y1 = min(lats) - 7, max(lats) + 9
+
+    def X(lon): return (lon - x0) / (x1 - x0) * 100.0      # percent
+    def Y(lat): return (y1 - lat) / (y1 - y0) * 100.0
+
+    W, H = 1000.0, 520.0                                   # viewBox, 16:8.3
+    sx, sy = W / 100.0, H / 100.0
+
+    svg = [f'<svg viewBox="0 0 {W:.0f} {H:.0f}" preserveAspectRatio="none" '
+           f'aria-hidden="true" xmlns="http://www.w3.org/2000/svg">']
+    g = []
+    lon = -180
+    while lon <= 180:
+        if x0 < lon < x1:
+            g.append(f'<line x1="{X(lon)*sx:.1f}" y1="0" x2="{X(lon)*sx:.1f}" y2="{H:.0f}"/>')
+        lon += 20
+    lat = -80
+    while lat <= 80:
+        if y0 < lat < y1:
+            g.append(f'<line x1="0" y1="{Y(lat)*sy:.1f}" x2="{W:.0f}" y2="{Y(lat)*sy:.1f}"/>')
+        lat += 10
+    svg.append('<g stroke="#232020" stroke-width="1.2">' + "".join(g) + '</g>')
+
+    ax, ay = X(HOMES[0][2]) * sx, Y(HOMES[0][1]) * sy
+    bx, by = X(HOMES[1][2]) * sx, Y(HOMES[1][1]) * sy
+    mx, my = (ax + bx) / 2, (ay + by) / 2 - abs(bx - ax) * 0.42
+    svg.append(f'<path d="M{ax:.1f},{ay:.1f} Q{mx:.1f},{my:.1f} {bx:.1f},{by:.1f}" '
+               f'fill="none" stroke="#C7A75F" stroke-width="2.5" stroke-dasharray="4 10" '
+               f'opacity=".8" vector-effect="non-scaling-stroke"/>')
+    for p, colour, r in ([(p, "#7EA8B8", 7) for p in PLACES] +
+                         [(p, "#C7A75F", 11) for p in HOMES]):
+        svg.append(f'<circle cx="{X(p[2])*sx:.1f}" cy="{Y(p[1])*sy:.1f}" r="{r}" '
+                   f'fill="{colour}" fill-opacity=".95"/>')
+    svg.append('</svg>')
+
+    # labels are real text, so they stay readable at any width
+    tags = []
+    for p, cls in ([(p, "there") for p in PLACES] + [(p, "home") for p in HOMES]):
+        label, lat_, lon_, side = p
+        tags.append(f'<span class="pin {cls} {side}" '
+                    f'style="left:{X(lon_):.2f}%;top:{Y(lat_):.2f}%">'
+                    f'{html.escape(label)}</span>')
+    arc = (f'<span class="pin gap" style="left:{(X(HOMES[0][2])+X(HOMES[1][2]))/2:.2f}%;'
+           f'top:{min(Y(HOMES[0][1]),Y(HOMES[1][1])) - 13:.2f}%">{APART:,} km</span>')
+    return '<div class="plot">' + "".join(svg) + "".join(tags) + arc + '</div>'
+
 
 TEMPLATE = r"""<!doctype html>
 <html lang="en">
@@ -91,7 +140,6 @@ TEMPLATE = r"""<!doctype html>
 <meta name="theme-color" content="#131110">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400&family=Hanken+Grotesk:wght@400;500;600&display=swap">
 <style>
 /* Single-theme by intention: a photo book read in the evening. Full-bleed
@@ -115,10 +163,16 @@ body{background:var(--bg);color:var(--ink);font-family:var(--ui);
 :focus-visible{outline:2px solid var(--brass);outline-offset:3px}
 
 /* ---- the photograph, uncovered ---- */
-.plate{width:100%;background:var(--raise);
+.plate{width:100%;background:var(--raise);cursor:pointer;position:relative;
   padding-top:env(safe-area-inset-top,0px)}
 .plate img{width:100%;height:min(66svh,660px);object-fit:cover;display:block}
 @media (max-width:620px){.plate img{height:min(54svh,460px)}}
+.tally{position:absolute;left:0;right:0;bottom:0;margin:0;
+  display:flex;justify-content:space-between;align-items:baseline;
+  padding:0 20px 14px;font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+  color:rgba(243,238,228,.78);text-shadow:0 1px 10px rgba(0,0,0,.85);
+  font-variant-numeric:tabular-nums;pointer-events:none}
+.tally .tap{color:var(--brass);opacity:.9}
 
 /* ---- titles ---- */
 .title{max-width:980px;margin:0 auto;padding:clamp(34px,6vw,58px) 24px clamp(10px,2vw,16px)}
@@ -175,15 +229,6 @@ h1 .it{font-style:italic;display:block;color:var(--brass)}
 .controls .shuffle{width:auto;padding:0 20px;border-radius:999px;font-size:14px}
 .controls .hint{margin-left:auto;font-size:12px;color:var(--faint);letter-spacing:.06em}
 
-/* ---- film strip ---- */
-.strip{display:flex;gap:10px;overflow-x:auto;padding:0 24px clamp(40px,8vw,72px);
-  max-width:1120px;margin:0 auto;scroll-snap-type:x proximity;
-  scrollbar-width:thin;scrollbar-color:var(--rule) transparent}
-.thumb{flex:none;width:clamp(92px,24vw,132px);aspect-ratio:1;padding:0;border:0;
-  background:var(--raise);border-radius:3px;overflow:hidden;cursor:pointer;
-  scroll-snap-align:start;opacity:.46;transition:opacity .22s}
-.thumb img{width:100%;height:100%;object-fit:cover}
-.thumb:hover,.thumb[aria-current="true"]{opacity:1}
 
 /* ---- index ---- */
 .index{max-width:1120px;margin:0 auto;
@@ -246,17 +291,22 @@ h1 .it{font-style:italic;display:block;color:var(--brass)}
 .atlas-top .gap small{font-family:var(--ui);font-size:11px;letter-spacing:.2em;
   text-transform:uppercase;color:var(--faint);display:block;text-align:right;
   margin-top:2px}
-#map{height:clamp(300px,52vw,460px);border:1px solid var(--rule);border-radius:4px;
-  background:var(--raise);z-index:0}
-.leaflet-container{background:#0E0C0B;font-family:var(--ui)}
-.leaflet-control-attribution{background:rgba(19,17,16,.78)!important;
-  color:var(--faint)!important;font-size:10px!important}
-.leaflet-control-attribution a{color:var(--dim)!important}
-.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:var(--raise);
-  color:var(--ink);border:1px solid var(--rule);border-radius:3px;box-shadow:var(--shadow)}
-.leaflet-popup-content{margin:9px 13px;font-size:13.5px}
-.leaflet-control-zoom a{background:var(--raise)!important;color:var(--ink)!important;
-  border-color:var(--rule)!important}
+.atlas figure{margin:0;border:1px solid var(--rule);border-radius:4px;
+  overflow:hidden;background:#0E0C0B}
+.plot{position:relative;width:100%;aspect-ratio:16/8.3}
+@media (max-width:620px){.plot{aspect-ratio:16/11}}
+.plot svg{position:absolute;inset:0;width:100%;height:100%}
+.pin{position:absolute;font-size:clamp(10.5px,1.5vw,14px);letter-spacing:.02em;
+  white-space:nowrap;text-shadow:0 1px 8px #0E0C0B,0 0 14px #0E0C0B;
+  pointer-events:none;line-height:1}
+.pin.there{color:#9FC3D1}
+.pin.home{color:var(--brass);font-weight:600}
+.pin.left{transform:translate(calc(-100% - 13px),-50%)}
+.pin.right{transform:translate(13px,-50%)}
+.pin.below{transform:translate(-50%,16px)}
+.pin.gap{color:var(--brass);font-family:var(--display);
+  font-size:clamp(15px,2.8vw,26px);transform:translate(-50%,-50%);
+  font-variant-numeric:tabular-nums;text-shadow:0 1px 10px #0E0C0B}
 .legend{display:flex;gap:22px;flex-wrap:wrap;margin-top:16px;font-size:12.5px;
   color:var(--dim)}
 .legend i{width:9px;height:9px;border-radius:50%;display:inline-block;
@@ -304,6 +354,7 @@ body.locked{overflow:hidden}
 
 <header class="plate">
   __HERO__
+  <p class="tally"><span id="tally"></span><span class="tap">tap for the next</span></p>
 </header>
 
 <div class="title">
@@ -329,10 +380,6 @@ body.locked{overflow:hidden}
   </div>
 </section>
 
-<div class="strip" id="strip">
-__STRIP__
-</div>
-
 <section class="tune">
   <div class="frame">
     <div class="screen" id="screen">
@@ -355,7 +402,7 @@ __STRIP__
     <h2>Where we are</h2>
     <div class="gap">__APART__ km<small>apart</small></div>
   </div>
-  <div id="map"></div>
+  <figure>__CHART__</figure>
   <p class="legend">
     <span><i style="background:#C7A75F"></i>The two of us</span>
     <span><i style="background:#7EA8B8"></i>Places we went together</span>
@@ -378,7 +425,6 @@ __ROWS__
   <span class="mark">&#9829;</span>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
 <script>
 (function () {
   var reasons = __REASONS__;
@@ -403,11 +449,10 @@ __ROWS__
       .replace(/[^a-z0-9]/g, '')
       .replace(/^the/, '');
   }
-  function already() {
-    try { return localStorage.getItem(KEY) === '1'; } catch (e) { return false; }
-  }
+  // asked fresh on every visit, on purpose - nothing is remembered
+  function already() { return false; }
   function remember() {
-    try { localStorage.setItem(KEY, '1'); } catch (e) {}
+    try { localStorage.removeItem(KEY); } catch (e) {}
   }
   var gate = document.getElementById('gate');
   function open_() {
@@ -522,18 +567,22 @@ __ROWS__
     });
   });
 
-  /* ---------- film strip ---------- */
+  /* ---------- tap the photograph for the next one ---------- */
   var hero = document.getElementById('hero');
-  if (hero && photos.length) {
-    var thumbs = Array.prototype.slice.call(document.querySelectorAll('.thumb'));
+  var tally = document.getElementById('tally');
+  if (hero && photos.length > 1) {
+    var shot = Math.floor(Math.random() * photos.length);
     function paintHero(i) {
-      hero.src = 'photos/' + photos[i];
-      thumbs.forEach(function (t, k) { t.setAttribute('aria-current', k === i ? 'true' : 'false'); });
+      shot = (i + photos.length) % photos.length;
+      hero.src = 'photos/' + photos[shot];
+      if (tally) tally.textContent = (shot + 1) + ' / ' + photos.length;
     }
-    thumbs.forEach(function (t) {
-      t.addEventListener('click', function () { paintHero(+t.dataset.i); });
+    document.querySelector('.plate').addEventListener('click', function () {
+      paintHero(shot + 1);
     });
-    paintHero(Math.floor(Math.random() * photos.length));
+    paintHero(shot);
+  } else if (tally) {
+    tally.hidden = true;
   }
 
   /* ---------- the song ---------- */
@@ -551,36 +600,6 @@ __ROWS__
     });
   }
 
-  /* ---------- the map ---------- */
-  if (window.L && document.getElementById('map')) {
-    var BRASS = '#C7A75F', STEEL = '#7EA8B8';
-    var map = L.map('map', { scrollWheelZoom: false, zoomControl: true });
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; OpenStreetMap &copy; CARTO',
-      subdomains: 'abcd', maxZoom: 18
-    }).addTo(map);
-
-    function dot(p, colour, big) {
-      return L.circleMarker([p[1], p[2]], {
-        radius: big ? 7 : 5, color: colour, weight: big ? 2 : 1.5,
-        fillColor: colour, fillOpacity: big ? .95 : .55
-      }).bindPopup(p[0]).addTo(map);
-    }
-
-    PLACES.forEach(function (p) { dot(p, STEEL, false); });
-    HOMES.forEach(function (p) { dot(p, BRASS, true).openPopup && null; });
-
-    var a = [HOMES[0][1], HOMES[0][2]], b = [HOMES[1][1], HOMES[1][2]];
-    L.polyline([a, b], {
-      color: BRASS, weight: 1.4, opacity: .75, dashArray: '2 7'
-    }).addTo(map);
-
-    var all = HOMES.concat(PLACES).map(function (p) { return [p[1], p[2]]; });
-    map.fitBounds(L.latLngBounds(all), { padding: [34, 34] });
-    map.on('click', function () { map.scrollWheelZoom.enable(); });
-    map.on('mouseout', function () { map.scrollWheelZoom.disable(); });
-  }
-
   paintLeaf(at, false);
   if (location.hash && location.hash !== '#lock') fromHash();
 })();
@@ -591,7 +610,6 @@ __ROWS__
 
 out = (
     TEMPLATE.replace("__ROWS__", index_rows)
-    .replace("__STRIP__", strip)
     .replace("__HERO__", hero_img)
     .replace("__REASONS__", json.dumps(reasons, ensure_ascii=False))
     .replace("__PHOTOS__", json.dumps(photos, ensure_ascii=False))
@@ -603,6 +621,7 @@ out = (
     .replace("__HOMES__", json.dumps(HOMES, ensure_ascii=False))
     .replace("__PLACES__", json.dumps(PLACES, ensure_ascii=False))
     .replace("__APART__", f"{APART:,}")
+    .replace("__CHART__", chart())
     .replace("__ANSWERS__", json.dumps(ANSWERS))
     .replace("__FIRST__", html.escape(reasons[0]))
 )
