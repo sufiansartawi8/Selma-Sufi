@@ -21,7 +21,33 @@ START = "2023-07-17"  # the Spain trip
 # A link out to the song. Hosting the recording would be piracy; this sends
 # her to the real thing. Swap SONG_URL for a direct link any time.
 SONG_LABEL = "Hey There Delilah"
-SONG_URL = "https://www.youtube.com/results?search_query=plain+white+t%27s+hey+there+delilah"
+SONG_ID = "h_m-BjrxmgI"          # YouTube video id
+SONG_BY = "Plain White T's"
+
+# Map. HOMES are the two of you; PLACES are everywhere you went together.
+# Edit freely — label, latitude, longitude.
+HOMES = [
+    ("Selma \u2014 Paris", 48.8566, 2.3522),
+    ("Sufyan \u2014 Amman", 31.9454, 35.9284),
+]
+PLACES = [
+    ("Marbella, Spain", 36.5101, -4.8824),
+    ("New York, USA", 40.7128, -74.0060),
+    ("Miami, USA", 25.7907, -80.1300),
+    ("Los Angeles, USA", 34.0736, -118.4004),
+    ("Dubai, UAE", 25.1972, 55.2744),
+    ("Petra, Jordan", 30.3285, 35.4444),
+    ("Wadi Rum, Jordan", 29.5765, 35.4204),
+]
+
+def _km(a, b):
+    import math
+    p = math.pi / 180
+    h = (0.5 - math.cos((b[0] - a[0]) * p) / 2
+         + math.cos(a[0] * p) * math.cos(b[0] * p) * (1 - math.cos((b[1] - a[1]) * p)) / 2)
+    return 2 * 6371 * math.asin(math.sqrt(h))
+
+APART = round(_km((HOMES[0][1], HOMES[0][2]), (HOMES[1][1], HOMES[1][2])))
 
 HINT = "Which restaurant in New York did we have our first date at?"
 ANSWERS = ["Wayan", "Wayan NYC", "Wayan New York", "Wayan Nolita", "Wayan restaurant"]
@@ -65,6 +91,7 @@ TEMPLATE = r"""<!doctype html>
 <meta name="theme-color" content="#131110">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400&family=Hanken+Grotesk:wght@400;500;600&display=swap">
 <style>
 /* Single-theme by intention: a photo book read in the evening. Full-bleed
@@ -87,30 +114,21 @@ body{background:var(--bg);color:var(--ink);font-family:var(--ui);
 ::selection{background:var(--brass);color:#131110}
 :focus-visible{outline:2px solid var(--brass);outline-offset:3px}
 
-/* ---- hero ---- */
-.hero{position:relative;min-height:62svh;display:flex;align-items:flex-end;
-  overflow:hidden;background:var(--raise)}
-.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-  filter:saturate(.92) contrast(1.04)}
-.hero::after{content:"";position:absolute;inset:0;
-  background:linear-gradient(to top,var(--bg) 2%,rgba(19,17,16,.82) 32%,rgba(19,17,16,.18) 68%,rgba(19,17,16,.45))}
-.hero .inner{position:relative;z-index:1;width:100%;max-width:980px;margin:0 auto;
-  padding:0 24px calc(40px + env(safe-area-inset-bottom,0px));
-  padding-top:calc(48px + env(safe-area-inset-top,0px))}
+/* ---- the photograph, uncovered ---- */
+.plate{width:100%;background:var(--raise);
+  padding-top:env(safe-area-inset-top,0px)}
+.plate img{width:100%;height:min(66svh,660px);object-fit:cover;display:block}
+@media (max-width:620px){.plate img{height:min(54svh,460px)}}
+
+/* ---- titles ---- */
+.title{max-width:980px;margin:0 auto;padding:clamp(34px,6vw,58px) 24px clamp(10px,2vw,16px)}
 .kicker{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--brass);
   margin:0 0 14px;font-weight:600}
-h1{font-family:var(--display);font-weight:400;font-size:clamp(46px,13vw,104px);
-  line-height:.92;margin:0;letter-spacing:-.02em}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(44px,12vw,94px);
+  line-height:.94;margin:0;letter-spacing:-.02em}
 h1 .it{font-style:italic;display:block;color:var(--brass)}
 .since{margin:18px 0 0;font-size:13.5px;color:var(--dim);
   font-variant-numeric:tabular-nums}
-.tune{margin:14px 0 0}
-.tune a{display:inline-flex;align-items:center;gap:9px;color:var(--brass);
-  text-decoration:none;font-size:13.5px;letter-spacing:.02em;
-  border-bottom:1px solid rgba(199,167,95,.3);padding-bottom:2px;
-  transition:border-color .18s}
-.tune a:hover{border-bottom-color:var(--brass)}
-.tune .note{font-size:15px;line-height:1}
 
 /* ---- the book ---- */
 .book{max-width:820px;margin:0 auto;padding:clamp(44px,8vw,80px) 24px;perspective:2000px}
@@ -197,6 +215,53 @@ h1 .it{font-style:italic;display:block;color:var(--brass)}
 .index details:not([open]) summary .meta::after{content:" \2014 open"}
 .index .panel{padding-bottom:30px}
 
+/* ---- the song ---- */
+.tune{max-width:820px;margin:0 auto;padding:0 24px clamp(44px,8vw,78px)}
+.tune .frame{border:1px solid var(--rule);border-radius:4px;overflow:hidden;
+  background:var(--raise);box-shadow:var(--shadow)}
+.tune .screen{position:relative;aspect-ratio:16/9;background:#000}
+.tune .screen iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.tune .poster{position:absolute;inset:0;width:100%;height:100%;padding:0;border:0;
+  cursor:pointer;background:#000;display:grid;place-items:center}
+.tune .poster img{width:100%;height:100%;object-fit:cover;opacity:.62;
+  transition:opacity .25s}
+.tune .poster:hover img{opacity:.78}
+.tune .play{position:absolute;width:62px;height:62px;border-radius:50%;
+  background:rgba(19,17,16,.72);border:1px solid var(--brass);display:grid;
+  place-items:center;color:var(--brass);font-size:19px;padding-left:4px;
+  backdrop-filter:blur(2px)}
+.tune .bar{display:flex;align-items:baseline;gap:12px;padding:15px 18px}
+.tune .bar .t{font-family:var(--display);font-size:17px}
+.tune .bar .by{font-size:12.5px;color:var(--faint)}
+.tune .bar .cue{margin-left:auto;font-size:11px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--brass)}
+
+/* ---- the map ---- */
+.atlas{max-width:1120px;margin:0 auto;padding:0 24px clamp(44px,8vw,78px)}
+.atlas-top{display:flex;align-items:baseline;gap:14px;margin-bottom:20px;flex-wrap:wrap}
+.atlas-top h2{font-family:var(--display);font-weight:400;font-style:italic;
+  font-size:clamp(24px,4.4vw,34px);margin:0}
+.atlas-top .gap{margin-left:auto;font-family:var(--display);font-size:clamp(20px,4vw,28px);
+  color:var(--brass);font-variant-numeric:tabular-nums}
+.atlas-top .gap small{font-family:var(--ui);font-size:11px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--faint);display:block;text-align:right;
+  margin-top:2px}
+#map{height:clamp(300px,52vw,460px);border:1px solid var(--rule);border-radius:4px;
+  background:var(--raise);z-index:0}
+.leaflet-container{background:#0E0C0B;font-family:var(--ui)}
+.leaflet-control-attribution{background:rgba(19,17,16,.78)!important;
+  color:var(--faint)!important;font-size:10px!important}
+.leaflet-control-attribution a{color:var(--dim)!important}
+.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:var(--raise);
+  color:var(--ink);border:1px solid var(--rule);border-radius:3px;box-shadow:var(--shadow)}
+.leaflet-popup-content{margin:9px 13px;font-size:13.5px}
+.leaflet-control-zoom a{background:var(--raise)!important;color:var(--ink)!important;
+  border-color:var(--rule)!important}
+.legend{display:flex;gap:22px;flex-wrap:wrap;margin-top:16px;font-size:12.5px;
+  color:var(--dim)}
+.legend i{width:9px;height:9px;border-radius:50%;display:inline-block;
+  margin-right:8px;vertical-align:1px}
+
 footer{border-top:1px solid var(--rule);max-width:1120px;margin:0 auto;
   padding:34px 24px calc(50px + env(safe-area-inset-bottom,0px));
   display:flex;justify-content:space-between;align-items:center;gap:16px;
@@ -237,16 +302,15 @@ body.locked{overflow:hidden}
   </div>
 </div>
 
-<header class="hero">
+<header class="plate">
   __HERO__
-  <div class="inner">
-    <p class="kicker">For Selma</p>
-    <h1>One hundred<span class="it">reasons</span></h1>
-    <p class="since" id="since"></p>
-    <p class="tune"><a href="__SONG_URL__" target="_blank" rel="noopener noreferrer">
-      <span class="note">&#9834;</span> Put this on first &mdash; __SONG_LABEL__</a></p>
-  </div>
 </header>
+
+<div class="title">
+  <p class="kicker">For Selma</p>
+  <h1>One hundred<span class="it">reasons</span></h1>
+  <p class="since" id="since"></p>
+</div>
 
 <section class="book">
   <div class="book-top"><span class="label" id="deckLabel">Today</span><span class="line"></span></div>
@@ -269,6 +333,35 @@ body.locked{overflow:hidden}
 __STRIP__
 </div>
 
+<section class="tune">
+  <div class="frame">
+    <div class="screen" id="screen">
+      <button type="button" class="poster" id="poster" aria-label="Play the song">
+        <img src="https://i.ytimg.com/vi/__SONG_ID__/maxresdefault.jpg" alt=""
+             onerror="this.src='https://i.ytimg.com/vi/__SONG_ID__/hqdefault.jpg'">
+        <span class="play">&#9654;</span>
+      </button>
+    </div>
+    <div class="bar">
+      <span class="t">__SONG_LABEL__</span>
+      <span class="by">__SONG_BY__</span>
+      <span class="cue">Press play</span>
+    </div>
+  </div>
+</section>
+
+<section class="atlas">
+  <div class="atlas-top">
+    <h2>Where we are</h2>
+    <div class="gap">__APART__ km<small>apart</small></div>
+  </div>
+  <div id="map"></div>
+  <p class="legend">
+    <span><i style="background:#C7A75F"></i>The two of us</span>
+    <span><i style="background:#7EA8B8"></i>Places we went together</span>
+  </p>
+</section>
+
 <section class="index">
   <details id="allOfThem">
     <summary><h2>All of them</h2><span class="meta">100</span></summary>
@@ -285,13 +378,23 @@ __ROWS__
   <span class="mark">&#9829;</span>
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
 <script>
 (function () {
   var reasons = __REASONS__;
   var photos  = __PHOTOS__;
   var ANSWERS = __ANSWERS__;
   var START   = "__START__";
+  var HOMES   = __HOMES__;
+  var PLACES  = __PLACES__;
+  var SONG    = "__SONG_ID__";
   var KEY     = 'sx.open';
+
+  // #lock in the address bar forgets the answer again (handy for testing)
+  if (location.hash === '#lock') {
+    try { localStorage.removeItem(KEY); } catch (e) {}
+    history.replaceState(null, '', location.pathname);
+  }
 
   /* ---------- the gate ---------- */
   function tidy(v) {
@@ -433,8 +536,53 @@ __ROWS__
     paintHero(Math.floor(Math.random() * photos.length));
   }
 
+  /* ---------- the song ---------- */
+  var poster = document.getElementById('poster');
+  if (poster) {
+    poster.addEventListener('click', function () {
+      var f = document.createElement('iframe');
+      f.src = 'https://www.youtube-nocookie.com/embed/' + SONG +
+              '?autoplay=1&rel=0&modestbranding=1';
+      f.title = 'Hey There Delilah';
+      f.allow = 'accelerometer; autoplay; encrypted-media; picture-in-picture';
+      f.referrerPolicy = 'strict-origin-when-cross-origin';
+      f.allowFullscreen = true;
+      document.getElementById('screen').replaceChildren(f);
+    });
+  }
+
+  /* ---------- the map ---------- */
+  if (window.L && document.getElementById('map')) {
+    var BRASS = '#C7A75F', STEEL = '#7EA8B8';
+    var map = L.map('map', { scrollWheelZoom: false, zoomControl: true });
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; OpenStreetMap &copy; CARTO',
+      subdomains: 'abcd', maxZoom: 18
+    }).addTo(map);
+
+    function dot(p, colour, big) {
+      return L.circleMarker([p[1], p[2]], {
+        radius: big ? 7 : 5, color: colour, weight: big ? 2 : 1.5,
+        fillColor: colour, fillOpacity: big ? .95 : .55
+      }).bindPopup(p[0]).addTo(map);
+    }
+
+    PLACES.forEach(function (p) { dot(p, STEEL, false); });
+    HOMES.forEach(function (p) { dot(p, BRASS, true).openPopup && null; });
+
+    var a = [HOMES[0][1], HOMES[0][2]], b = [HOMES[1][1], HOMES[1][2]];
+    L.polyline([a, b], {
+      color: BRASS, weight: 1.4, opacity: .75, dashArray: '2 7'
+    }).addTo(map);
+
+    var all = HOMES.concat(PLACES).map(function (p) { return [p[1], p[2]]; });
+    map.fitBounds(L.latLngBounds(all), { padding: [34, 34] });
+    map.on('click', function () { map.scrollWheelZoom.enable(); });
+    map.on('mouseout', function () { map.scrollWheelZoom.disable(); });
+  }
+
   paintLeaf(at, false);
-  if (location.hash) fromHash();
+  if (location.hash && location.hash !== '#lock') fromHash();
 })();
 </script>
 </body>
@@ -450,7 +598,11 @@ out = (
     .replace("__START__", START)
     .replace("__HINT__", html.escape(HINT))
     .replace("__SONG_LABEL__", html.escape(SONG_LABEL))
-    .replace("__SONG_URL__", html.escape(SONG_URL))
+    .replace("__SONG_ID__", html.escape(SONG_ID))
+    .replace("__SONG_BY__", html.escape(SONG_BY))
+    .replace("__HOMES__", json.dumps(HOMES, ensure_ascii=False))
+    .replace("__PLACES__", json.dumps(PLACES, ensure_ascii=False))
+    .replace("__APART__", f"{APART:,}")
     .replace("__ANSWERS__", json.dumps(ANSWERS))
     .replace("__FIRST__", html.escape(reasons[0]))
 )
