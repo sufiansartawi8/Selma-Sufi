@@ -194,6 +194,7 @@ footer .mark{color:var(--brass);font-size:15px}
 /* ---- gate ---- */
 #gate{position:fixed;inset:0;z-index:50;background:var(--bg);display:grid;
   place-items:center;padding:28px}
+#gate[hidden]{display:none}
 #gate .box{width:100%;max-width:430px;text-align:center}
 #gate .mark{font-family:var(--display);font-size:34px;color:var(--brass);margin:0 0 26px}
 #gate p.q{font-family:var(--display);font-size:clamp(21px,5vw,28px);line-height:1.3;
