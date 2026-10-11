@@ -36,7 +36,8 @@ PLACES = [
     ("Marbella", 36.5101, -4.8824, "left"),
     ("New York", 40.7128, -74.0060, "left"),
     ("Miami", 25.7907, -80.1300, "below"),
-    ("Los Angeles", 34.0736, -118.4004, "right"),
+    ("Los Angeles", 34.0736, -118.4004, "left"),
+    ("Las Vegas", 36.1699, -115.1398, "right"),
     ("Dubai", 25.1972, 55.2744, "below"),
     ("Petra & Wadi Rum", 29.9000, 35.4300, "below"),
 ]
@@ -101,12 +102,14 @@ LEXICON = [
 
 # --- Three years, short. Edit freely. ---
 TIMELINE = [
-    ("Jul 2023", "Spain", "A ferry, and a lot of trouble. Worth it."),
-    ("Oct 2024", "Again", "A year and a half of nothing, then no time had passed."),
-    ("Nov 2024", "New York", "Lunch breaks, the L train, walking everywhere."),
-    ("2025", "Everywhere", "Miami, Los Angeles, Dubai, Marbella again."),
-    ("Aug 2025", "Cornell", "\u201cI'm so proud of you baby.\u201d"),
-    ("2026", "Jordan", "Wadi Rum in the rain. Petra without your passport."),
+    ("Jul 2023",            "Marbella",            "A ferry, and a lot of trouble. The good kind."),
+    ("Oct 2024 \u2013 Sep 2025", "New York",            "The whole middle of it. Lunch breaks, the L train, walking everywhere."),
+    ("Feb 2025",            "Paris",               "Your city. Your door, open."),
+    ("May 2025",            "Miami",               "Sun, and you winking at the camera."),
+    ("Jul 2025",            "Los Angeles & Las Vegas", "Beverly Hills, and whatever happened after."),
+    ("Nov 2025",            "Amman",               "My people. You fit in like you had always been there."),
+    ("Dec 2025",            "Dubai",               "New Year, the rooftop, all of us."),
+    ("Aug 2026",            "Marbella",            "Where it started. The last time I saw you."),
 ]
 
 # --- Open when... Replace every one of these with your own words. ---
@@ -197,7 +200,22 @@ def chart():
 
     svg = [f'<svg viewBox="0 0 {W:.0f} {H:.0f}" preserveAspectRatio="none" '
            f'aria-hidden="true" xmlns="http://www.w3.org/2000/svg">',
-           f'<rect width="{W:.0f}" height="{H:.0f}" fill="#0C0B0A"/>']
+           '<defs>'
+           '<linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">'
+           '<stop offset="0" stop-color="#0D1316"/><stop offset="1" stop-color="#0A0C0D"/>'
+           '</linearGradient>'
+           '<linearGradient id="soil" x1="0" y1="0" x2="0" y2="1">'
+           '<stop offset="0" stop-color="#232019"/><stop offset="1" stop-color="#1A1814"/>'
+           '</linearGradient>'
+           '<linearGradient id="ours" x1="0" y1="0" x2="0" y2="1">'
+           '<stop offset="0" stop-color="#3A352A"/><stop offset="1" stop-color="#2A261E"/>'
+           '</linearGradient>'
+           '<filter id="warm" x="-25%" y="-25%" width="150%" height="150%">'
+           '<feGaussianBlur stdDeviation="7" result="b"/>'
+           '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>'
+           '</filter>'
+           '</defs>',
+           f'<rect width="{W:.0f}" height="{H:.0f}" fill="url(#sea)"/>']
 
     g = []
     lon = -180
@@ -208,23 +226,32 @@ def chart():
     while lat <= 80:
         if y0 < lat < y1: g.append(f'<line x1="0" y1="{Y(lat):.1f}" x2="{W:.0f}" y2="{Y(lat):.1f}"/>')
         lat += 10
-    svg.append('<g stroke="#1B1917" stroke-width="1">' + "".join(g) + "</g>")
+    svg.append('<g stroke="#15191B" stroke-width="1">' + "".join(g) + "</g>")
 
-    svg.append(f'<g fill="#201D1A" stroke="#302B26" stroke-width="1" '
+    svg.append(f'<g fill="url(#soil)" stroke="#342F27" stroke-width="1" '
                f'vector-effect="non-scaling-stroke"><path d="{" ".join(land)}"/></g>')
-    svg.append(f'<g fill="#2C2A25" stroke="#5E5847" stroke-width="1.2" '
+    svg.append(f'<g fill="url(#ours)" stroke="#8A7A52" stroke-width="1.3" '
                f'vector-effect="non-scaling-stroke"><path d="{" ".join(lit)}"/></g>')
 
     ax, ay = X(HOMES[0][2]), Y(HOMES[0][1])
     bx, by = X(HOMES[1][2]), Y(HOMES[1][1])
     mx, my = (ax + bx) / 2, (ay + by) / 2 - abs(bx - ax) * 0.45
-    svg.append(f'<path d="M{ax:.1f},{ay:.1f} Q{mx:.1f},{my:.1f} {bx:.1f},{by:.1f}" '
-               f'fill="none" stroke="#C7A75F" stroke-width="2.5" stroke-dasharray="4 10" '
-               f'opacity=".9" vector-effect="non-scaling-stroke"/>')
-    for p, colour, r in ([(q, "#7EA8B8", 7) for q in PLACES] +
-                         [(q, "#C7A75F", 11) for q in HOMES]):
-        svg.append(f'<circle cx="{X(p[2]):.1f}" cy="{Y(p[1]):.1f}" r="{r}" fill="{colour}" '
-                   f'stroke="#0C0B0A" stroke-width="2"/>')
+    arc = f'M{ax:.1f},{ay:.1f} Q{mx:.1f},{my:.1f} {bx:.1f},{by:.1f}'
+    svg.append(f'<path d="{arc}" fill="none" stroke="#C7A75F" stroke-width="7" '
+               f'opacity=".16" filter="url(#warm)" vector-effect="non-scaling-stroke"/>')
+    svg.append(f'<path class="flight" d="{arc}" fill="none" stroke="#C7A75F" '
+               f'stroke-width="2.4" stroke-dasharray="3 11" stroke-linecap="round" '
+               f'opacity=".95" vector-effect="non-scaling-stroke"/>')
+    for p, colour, r in ([(q, "#7EA8B8", 6) for q in PLACES] +
+                         [(q, "#C7A75F", 8) for q in HOMES]):
+        cx, cy = X(p[2]), Y(p[1])
+        svg.append(f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{r*2.6:.1f}" fill="{colour}" '
+                   f'opacity=".10"/>')
+        svg.append(f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{r*1.7:.1f}" fill="none" '
+                   f'stroke="{colour}" stroke-width="1" opacity=".4" '
+                   f'vector-effect="non-scaling-stroke"/>')
+        svg.append(f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{r}" fill="{colour}" '
+                   f'stroke="#0A0C0D" stroke-width="1.6"/>')
     svg.append("</svg>")
 
     tags = [f'<span class="pin {cls} {p[3]}" style="left:{PX(p[2]):.2f}%;top:{PY(p[1]):.2f}%">'
@@ -236,9 +263,7 @@ def chart():
 
 
 def figure():
-    """A constellation of her: points joined by lines, each one tappable."""
-    node = {(x, y): (name, why) for x, y, name, why in PARTS}
-    # mirrored points share a meaning with their twin
+    """A constellation of her: a star chart, each star tappable."""
     twins = {(290, 332): "Your arms", (304, 432): "Your hands",
              (234, 548): "Your legs", (238, 668): "Your feet",
              (260, 238): "Your shoulders"}
@@ -251,31 +276,57 @@ def figure():
         ((176, 292), (200, 334)), ((260, 238), (200, 334)),
         ((200, 334), (200, 424)), ((200, 424), (166, 548)),
         ((200, 424), (234, 548)), ((166, 548), (162, 668)),
-        ((234, 548), (238, 668)),
+        ((234, 548), (238, 668)), ((140, 238), (260, 238)),
     ]
-    out = ['<svg viewBox="0 0 400 760" class="figsvg" '
-           'xmlns="http://www.w3.org/2000/svg" aria-label="Tap any point">']
-    out.append('<g stroke="#4A4237" stroke-width="1.4" stroke-linecap="round">' +
+    stars = [(x, y) for x, y, _, _ in PARTS] + list(twins) + [(200, 424)]
+
+    out = ['<svg viewBox="-30 10 460 790" class="figsvg" '
+           'xmlns="http://www.w3.org/2000/svg" aria-label="Tap any point">',
+           '<defs>'
+           '<radialGradient id="halo" cx="50%" cy="46%" r="52%">'
+           '<stop offset="0" stop-color="#C7A75F" stop-opacity=".12"/>'
+           '<stop offset="1" stop-color="#C7A75F" stop-opacity="0"/>'
+           '</radialGradient>'
+           '<filter id="twinkle" x="-70%" y="-70%" width="240%" height="240%">'
+           '<feGaussianBlur stdDeviation="5" result="b"/>'
+           '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>'
+           '</filter>'
+           '</defs>',
+           '<rect x="-30" y="10" width="460" height="790" fill="url(#halo)"/>']
+
+    # faint scatter so it reads as sky, not a diagram
+    import random as _r
+    _r.seed(17)
+    dust = "".join(
+        f'<circle cx="{_r.uniform(-20, 420):.0f}" cy="{_r.uniform(20, 780):.0f}" '
+        f'r="{_r.choice([0.8, 1, 1.3]):.1f}" fill="#C7A75F" opacity="{_r.uniform(.07, .2):.2f}"/>'
+        for _ in range(80))
+    out.append(dust)
+
+    out.append('<g stroke="#6B5F42" stroke-width="1" stroke-linecap="round" opacity=".7">' +
                "".join(f'<line x1="{a[0]}" y1="{a[1]}" x2="{b[0]}" y2="{b[1]}"/>'
                        for a, b in bones) + "</g>")
-    quiet = [(200, 424), (260, 238), (290, 332), (304, 432), (234, 548), (238, 668)]
-    for x, y in quiet:
-        label = twins.get((x, y))
-        if label:
-            out.append(f'<circle class="node" cx="{x}" cy="{y}" r="22" '
-                       f'data-part="{html.escape(label)}" tabindex="0" role="button"/>')
-        else:
-            out.append(f'<circle cx="{x}" cy="{y}" r="4.5" fill="#4A4237"/>')
-    for x, y, name, why in PARTS:
-        out.append(f'<circle class="node" cx="{x}" cy="{y}" r="22" '
+
+    # every joint gets a small star
+    for x, y in stars:
+        out.append(f'<g filter="url(#twinkle)"><circle cx="{x}" cy="{y}" r="2.6" '
+                   f'fill="#F3EEE4" opacity=".85"/></g>')
+
+    # the tappable ones get a ring
+    for x, y in list(twins):
+        out.append(f'<circle class="node" cx="{x}" cy="{y}" r="21" '
+                   f'data-part="{html.escape(twins[(x, y)])}" tabindex="0" role="button"/>')
+    for x, y, name, _ in PARTS:
+        out.append(f'<circle class="node" cx="{x}" cy="{y}" r="21" '
                    f'data-part="{html.escape(name)}" tabindex="0" role="button"/>')
     out.append("</svg>")
+
     say = "".join(
         f'<button type="button" class="chip" data-part="{html.escape(n)}">{html.escape(n)}</button>'
         for _, _, n, _ in PARTS)
     data = json.dumps({n: w for _, _, n, w in PARTS}, ensure_ascii=False)
     return ('<div class="fig"><div class="figwrap">' + "".join(out) +
-            '</div><div class="figsay"><p class="what" id="partName">Tap any point</p>'
+            '</div><div class="figsay"><p class="what" id="partName">Tap a star</p>'
             '<p class="why" id="partWhy">Every part of you is for something.</p>'
             '<div class="chips">' + say + '</div></div></div>'
             '<script type="application/json" id="partData">' + data + '</script>')
@@ -461,8 +512,9 @@ h1 .it{font-style:italic;display:block;color:var(--brass)}
   text-transform:uppercase;color:var(--brass)}
 
 /* ---- the map ---- */
-.atlas{max-width:1120px;margin:0 auto;padding:0 24px clamp(44px,8vw,78px)}
-.atlas-top{display:flex;align-items:baseline;gap:14px;margin-bottom:20px;flex-wrap:wrap}
+.atlas{max-width:1120px;margin:0 auto;padding:0 24px clamp(46px,7.5vw,80px)}
+.atlas-top{display:flex;align-items:baseline;gap:14px;margin-bottom:22px;flex-wrap:wrap;
+  padding-bottom:14px;border-bottom:1px solid var(--rule)}
 .atlas-top h2{font-family:var(--display);font-weight:400;font-style:italic;
   font-size:clamp(24px,4.4vw,34px);margin:0}
 .atlas-top .gap{margin-left:auto;font-family:var(--display);font-size:clamp(20px,4vw,28px);
@@ -475,6 +527,11 @@ h1 .it{font-style:italic;display:block;color:var(--brass)}
 .plot{position:relative;width:100%;aspect-ratio:16/8.3}
 @media (max-width:620px){.plot{aspect-ratio:16/11}}
 .plot svg{position:absolute;inset:0;width:100%;height:100%}
+.plot::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(130% 110% at 50% 50%,transparent 52%,rgba(8,9,10,.72) 100%)}
+@media (prefers-reduced-motion:no-preference){
+  .flight{stroke-dashoffset:0;animation:fly 9s linear infinite}
+  @keyframes fly{to{stroke-dashoffset:-140}}}
 .pin{position:absolute;font-size:clamp(10.5px,1.5vw,14px);letter-spacing:.02em;
   white-space:nowrap;text-shadow:0 1px 8px #0E0C0B,0 0 14px #0E0C0B;
   pointer-events:none;line-height:1}
@@ -492,9 +549,11 @@ h1 .it{font-style:italic;display:block;color:var(--brass)}
   margin-right:8px;vertical-align:1px}
 
 /* ---- say something back ---- */
-.post{max-width:820px;margin:0 auto;padding:0 24px clamp(44px,8vw,78px)}
+.post{max-width:820px;margin:0 auto;padding:0 24px clamp(46px,7.5vw,80px)}
 .post h2{font-family:var(--display);font-weight:400;font-style:italic;
-  font-size:clamp(24px,4.4vw,34px);margin:0 0 6px}
+  font-size:clamp(24px,4.4vw,34px);margin:0 0 6px;padding-bottom:14px;
+  border-bottom:1px solid var(--rule)}
+.post h2 + .sub{margin-top:14px}
 .post .sub{margin:0 0 18px;color:var(--faint);font-size:13.5px;max-width:52ch}
 .post textarea{width:100%;background:var(--raise);border:1px solid var(--rule);
   border-radius:4px;color:var(--ink);font-family:var(--ui);font-size:16px;
@@ -510,16 +569,18 @@ h1 .it{font-style:italic;display:block;color:var(--brass)}
 .postrow .said{font-size:13px;color:var(--dim)}
 
 /* ---- what you are made of ---- */
-.parts{max-width:1120px;margin:0 auto;padding:0 24px clamp(44px,8vw,78px)}
+.parts{max-width:1120px;margin:0 auto;padding:0 24px clamp(46px,7.5vw,80px)}
 .fig{display:flex;gap:clamp(22px,5vw,60px);align-items:center;flex-wrap:wrap;
   border:1px solid var(--rule);border-radius:4px;background:#0C0B0A;
   padding:clamp(22px,4vw,40px)}
-.figwrap{flex:0 0 auto;width:clamp(180px,34vw,260px);margin:0 auto}
+.figwrap{flex:0 0 auto;width:clamp(190px,36vw,280px);margin:0 auto}
 .figsvg{display:block;width:100%;height:auto;overflow:visible}
-.figsvg .node{fill:#C7A75F;fill-opacity:.28;stroke:#C7A75F;stroke-width:1.5;
-  stroke-opacity:.5;cursor:pointer;transition:fill-opacity .18s,stroke-opacity .18s}
-.figsvg .node:hover{fill-opacity:.5;stroke-opacity:1}
-.figsvg .node.on{fill-opacity:.85;stroke-opacity:1}
+.figsvg .node{fill:#C7A75F;fill-opacity:.05;stroke:#C7A75F;stroke-width:1.1;
+  stroke-opacity:.3;cursor:pointer;
+  transition:fill-opacity .22s,stroke-opacity .22s,r .22s}
+.figsvg .node:hover{fill-opacity:.2;stroke-opacity:.8}
+.figsvg .node.on{fill-opacity:.42;stroke-opacity:1;stroke-width:1.6}
+.fig{background:radial-gradient(120% 80% at 30% 20%,#17150F 0%,#0B0A09 72%)}
 .figsay{flex:1 1 260px;min-width:0}
 .figsay .what{font-family:var(--display);font-size:clamp(24px,5vw,38px);
   color:var(--brass);margin:0 0 6px;line-height:1.1}
@@ -532,7 +593,7 @@ h1 .it{font-style:italic;display:block;color:var(--brass)}
 .chip:hover,.chip.on{color:var(--brass);border-color:var(--brass)}
 
 /* ---- how you talk ---- */
-.lexicon{max-width:1120px;margin:0 auto;padding:0 24px clamp(44px,8vw,78px)}
+.lexicon{max-width:1120px;margin:0 auto;padding:0 24px clamp(46px,7.5vw,80px)}
 .tallyline{margin:0 0 24px;color:var(--faint);font-size:13.5px;
   font-variant-numeric:tabular-nums;max-width:48ch}
 .lex{list-style:none;margin:0;padding:0;display:grid;gap:1px;
@@ -547,7 +608,7 @@ h1 .it{font-style:italic;display:block;color:var(--brass)}
 .lex .g{grid-column:1/-1;font-size:12.5px;color:var(--faint);line-height:1.45}
 
 /* ---- three years ---- */
-.years{max-width:820px;margin:0 auto;padding:0 24px clamp(44px,8vw,78px)}
+.years{max-width:820px;margin:0 auto;padding:0 24px clamp(46px,7.5vw,80px)}
 .tl{list-style:none;margin:0;padding:0}
 .tl li{display:grid;grid-template-columns:auto 18px 1fr;align-items:start;
   column-gap:14px;position:relative;padding-bottom:26px}
@@ -575,7 +636,7 @@ h1 .it{font-style:italic;display:block;color:var(--brass)}
 .apartby{margin:0 0 4px;font-size:13px;color:var(--dim);font-style:italic}
 
 /* ---- open when ---- */
-.mail{max-width:820px;margin:0 auto;padding:0 24px clamp(44px,8vw,78px)}
+.mail{max-width:820px;margin:0 auto;padding:0 24px clamp(46px,7.5vw,80px)}
 .envs{display:grid;gap:10px}
 .env{border:1px solid var(--rule);border-radius:4px;background:var(--raise)}
 .env summary{list-style:none;cursor:pointer;padding:17px 20px;
@@ -590,11 +651,15 @@ h1 .it{font-style:italic;display:block;color:var(--brass)}
   color:var(--ink);max-width:54ch}
 
 /* ---- theo ---- */
-.theo{max-width:820px;margin:0 auto;padding:0 24px clamp(44px,8vw,78px);
-  display:flex;align-items:center;gap:clamp(18px,4vw,34px);flex-wrap:wrap}
-.pup{flex:0 0 auto;width:clamp(74px,15vw,104px)}
-.pup svg{width:100%;height:auto;display:block}
-.pupsay{flex:1 1 240px;min-width:0}
+.theo{max-width:960px;margin:0 auto;padding:0 24px clamp(46px,7.5vw,80px);
+  display:flex;align-items:center;gap:clamp(22px,5vw,46px);flex-wrap:wrap}
+.film{margin:0;flex:0 0 auto;width:clamp(200px,42vw,300px);
+  border:1px solid var(--rule);border-radius:6px;overflow:hidden;
+  background:#000;box-shadow:var(--shadow)}
+.film video{display:block;width:100%;height:auto}
+.paw{display:block;width:34px;color:var(--brass);margin-bottom:10px}
+.paw svg{width:100%;height:auto;display:block}
+.pupsay{flex:1 1 260px;min-width:0}
 .pupsay h2{font-family:var(--display);font-weight:400;font-style:italic;
   font-size:clamp(24px,4.4vw,34px);margin:0 0 6px}
 .pupsay p{margin:0;color:var(--dim);font-size:14.5px;line-height:1.55;max-width:46ch}
@@ -752,17 +817,21 @@ __LETTERS__
 </section>
 
 <section class="theo">
-  <div class="pup">
-    <svg viewBox="0 0 120 120" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="60" cy="74" rx="22" ry="19" fill="#C7A75F" opacity=".9"/>
-      <ellipse cx="38" cy="44" rx="11" ry="14" fill="#C7A75F" opacity=".75"
-        transform="rotate(-22 38 44)"/>
-      <ellipse cx="60" cy="36" rx="11" ry="14" fill="#C7A75F" opacity=".75"/>
-      <ellipse cx="82" cy="44" rx="11" ry="14" fill="#C7A75F" opacity=".75"
-        transform="rotate(22 82 44)"/>
-    </svg>
-  </div>
+  <figure class="film">
+    <video id="theoFilm" src="media/theo.mp4" poster="media/theo.jpg"
+           preload="none" playsinline controls loop></video>
+  </figure>
   <div class="pupsay">
+    <span class="paw" aria-hidden="true">
+      <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="60" cy="76" rx="21" ry="18" fill="currentColor" opacity=".95"/>
+        <ellipse cx="39" cy="46" rx="10" ry="13" fill="currentColor" opacity=".8"
+          transform="rotate(-22 39 46)"/>
+        <ellipse cx="60" cy="38" rx="10" ry="13" fill="currentColor" opacity=".8"/>
+        <ellipse cx="81" cy="46" rx="10" ry="13" fill="currentColor" opacity=".8"
+          transform="rotate(22 81 46)"/>
+      </svg>
+    </span>
     <h2>__THEO_NAME__</h2>
     <p>__THEO_WHY__</p>
   </div>
