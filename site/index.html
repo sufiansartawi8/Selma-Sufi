@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>100 Reasons for Selma</title>
+<meta name="description" content="One hundred reasons, and one that shows up every day.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Karla:wght@400;500;600&display=swap">
+<style>
+/* Layout: a quiet column - photo, one reason of the day, then all of them. */
+:root{
+  --bg:#F5F6FA; --surface:#FFFFFF; --ink:#191C2C; --muted:#656A84;
+  --accent:#3647C4; --accent-soft:#E6E8F8; --rose:#C9798A; --rule:#DFE1EE;
+  --display:'Instrument Serif',Georgia,'Times New Roman',serif;
+  --body:'Karla','Helvetica Neue',Arial,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0F1120; --surface:#171A2C; --ink:#ECEEF8; --muted:#9BA1BC;
+  --accent:#8C98F2; --accent-soft:#232848; --rose:#E2A0AE; --rule:#272C47;
+  color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#0F1120; --surface:#171A2C; --ink:#ECEEF8; --muted:#9BA1BC;
+  --accent:#8C98F2; --accent-soft:#232848; --rose:#E2A0AE; --rule:#272C47;
+  color-scheme:dark;}
+
+*{box-sizing:border-box}
+html,body{margin:0}
+img{max-width:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);
+  font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:760px;margin:0 auto;padding-inline:20px;
+  padding-block:calc(52px + env(safe-area-inset-top,0px)) calc(72px + env(safe-area-inset-bottom,0px))}
+
+header{display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
+.eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:0}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(44px,11vw,76px);
+  line-height:1.02;margin:0;text-wrap:balance;letter-spacing:-.01em}
+h1 em{font-style:italic;color:var(--accent)}
+.sub{color:var(--muted);max-width:46ch;margin:0}
+
+.shot{margin:0 0 34px;display:flex;flex-direction:column;gap:12px;align-items:flex-end}
+.shot img{width:100%;border-radius:18px;display:block;aspect-ratio:3/2;
+  object-fit:cover;background:var(--accent-soft);transition:opacity .22s ease}
+.shot img.fading{opacity:.3}
+
+button{font-family:var(--body);font-size:13px;font-weight:600;letter-spacing:.04em;
+  color:var(--accent);background:var(--accent-soft);border:0;border-radius:999px;
+  padding:9px 16px;cursor:pointer;transition:opacity .15s}
+button:hover{opacity:.78}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.daily{background:var(--surface);border:1px solid var(--rule);border-radius:18px;
+  padding:26px 24px 20px;display:flex;flex-direction:column;gap:14px;margin-bottom:52px}
+.daily .cap{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0}
+.daily .body{display:flex;gap:16px;align-items:baseline;min-height:96px}
+.daily button{align-self:flex-start}
+#dailyNum{font-family:var(--display);font-size:46px;line-height:1;color:var(--accent);
+  font-variant-numeric:tabular-nums;flex:none}
+#dailyText{font-family:var(--display);font-size:clamp(22px,5.2vw,30px);line-height:1.25;
+  margin:0;min-width:0;text-wrap:balance}
+
+.listhead{display:flex;align-items:center;gap:14px;margin-bottom:8px}
+.listhead span{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.listhead .line{flex:1;height:1px;background:var(--rule)}
+
+ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.reason{display:flex;gap:18px;align-items:baseline;padding:13px 2px;
+  border-bottom:1px solid var(--rule)}
+.reason .n{font-family:var(--display);font-size:17px;color:var(--muted);
+  font-variant-numeric:tabular-nums;min-width:2.1em;text-align:right;flex:none}
+.reason .t{min-width:0}
+.reason:last-child{border-bottom:0}
+.reason:last-child .t{color:var(--accent)}
+
+footer{margin-top:56px;text-align:center;color:var(--muted);font-size:14px}
+footer .heart{color:var(--rose);font-size:18px;display:block;margin-bottom:8px}
+
+@media (prefers-reduced-motion:reduce){.shot img{transition:none}}
+@media (prefers-reduced-motion:no-preference){
+  header,.shot,.daily{animation:rise .6s ease-out both}
+  .shot{animation-delay:.06s} .daily{animation-delay:.12s}
+  @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Selma Esqalli</p>
+    <h1>100 reasons <em>why I love you</em></h1>
+    <p class="sub">All of them, in one place. One shows up here every day.</p>
+  </header>
+
+
+  <section class="daily">
+    <p class="cap">Today</p>
+    <div class="body">
+      <div id="dailyNum">1</div>
+      <p id="dailyText">The way you walk into a room smiling. Even my grandma noticed</p>
+    </div>
+    <button id="another" type="button">Show me another</button>
+  </section>
+
+  <div class="listhead"><span>All one hundred</span><div class="line"></div></div>
+  <ol>
+      <li class="reason"><span class="n">1</span><span class="t">The way you walk into a room smiling. Even my grandma noticed</span></li>
+      <li class="reason"><span class="n">2</span><span class="t">Your eyes</span></li>
+      <li class="reason"><span class="n">3</span><span class="t">Your smile</span></li>
+      <li class="reason"><span class="n">4</span><span class="t">Your laugh. It could make anyone fall in love with you</span></li>
+      <li class="reason"><span class="n">5</span><span class="t">Your face with makeup</span></li>
+      <li class="reason"><span class="n">6</span><span class="t">Your face without makeup</span></li>
+      <li class="reason"><span class="n">7</span><span class="t">Your body in a bikini</span></li>
+      <li class="reason"><span class="n">8</span><span class="t">Your body with nothing on</span></li>
+      <li class="reason"><span class="n">9</span><span class="t">You were a very cute baby</span></li>
+      <li class="reason"><span class="n">10</span><span class="t">Your beautiful soul</span></li>
+      <li class="reason"><span class="n">11</span><span class="t">The way you switch between French, English and Arabic mid-sentence</span></li>
+      <li class="reason"><span class="n">12</span><span class="t">You stop speaking English when you&#x27;re tired</span></li>
+      <li class="reason"><span class="n">13</span><span class="t">When you say “exact”</span></li>
+      <li class="reason"><span class="n">14</span><span class="t">When you say hihihi</span></li>
+      <li class="reason"><span class="n">15</span><span class="t">You always use 🤍</span></li>
+      <li class="reason"><span class="n">16</span><span class="t">When you tell me ily out of nowhere</span></li>
+      <li class="reason"><span class="n">17</span><span class="t">Your voice notes where you&#x27;re laughing so hard I can&#x27;t understand a word</span></li>
+      <li class="reason"><span class="n">18</span><span class="t">“I&#x27;m home,” sent every time so I&#x27;d stop wondering</span></li>
+      <li class="reason"><span class="n">19</span><span class="t">“My door is open in Paris”</span></li>
+      <li class="reason"><span class="n">20</span><span class="t">You sleep anywhere and everywhere — flights, subways, car rides, my lap</span></li>
+      <li class="reason"><span class="n">21</span><span class="t">Being in lalaland when we&#x27;re walking together</span></li>
+      <li class="reason"><span class="n">22</span><span class="t">Your love for food and the fact that you never actually eat</span></li>
+      <li class="reason"><span class="n">23</span><span class="t">The food you make always looks incredible and I never once got to try it</span></li>
+      <li class="reason"><span class="n">24</span><span class="t">You forget to eat and forget to drink water and I have to remind you about both</span></li>
+      <li class="reason"><span class="n">25</span><span class="t">When you&#x27;re starving after work</span></li>
+      <li class="reason"><span class="n">26</span><span class="t">You&#x27;re a boss lady, and people trust you blindly</span></li>
+      <li class="reason"><span class="n">27</span><span class="t">You want a real career. You&#x27;re ambitious. You never wanted to be a stay-at-home Pilates mom</span></li>
+      <li class="reason"><span class="n">28</span><span class="t">You&#x27;re building a life in Paris when you don&#x27;t have to. You could be at home with your parents and you chose not to be</span></li>
+      <li class="reason"><span class="n">29</span><span class="t">You&#x27;re so good at work</span></li>
+      <li class="reason"><span class="n">30</span><span class="t">You&#x27;re very intelligent, and I get your opinion on everything before I do it</span></li>
+      <li class="reason"><span class="n">31</span><span class="t">You listen to my startup ideas even though you think they&#x27;re stupid</span></li>
+      <li class="reason"><span class="n">32</span><span class="t">You keep pushing me</span></li>
+      <li class="reason"><span class="n">33</span><span class="t">“I&#x27;m proud of you,” said about things that hadn&#x27;t earned it yet</span></li>
+      <li class="reason"><span class="n">34</span><span class="t">Your support for every single interview I&#x27;ve done</span></li>
+      <li class="reason"><span class="n">35</span><span class="t">You&#x27;re cultured, and curious about every culture that isn&#x27;t your own</span></li>
+      <li class="reason"><span class="n">36</span><span class="t">You&#x27;re specific about what you like. Nothing about you is basic</span></li>
+      <li class="reason"><span class="n">37</span><span class="t">You don&#x27;t follow trends, you set them</span></li>
+      <li class="reason"><span class="n">38</span><span class="t">You&#x27;re always there for me — fighting or not, whether you hate me that week or not</span></li>
+      <li class="reason"><span class="n">39</span><span class="t">Even when you&#x27;re mad at me you still say goodnight</span></li>
+      <li class="reason"><span class="n">40</span><span class="t">You&#x27;re so invested in my life. My problems, my wins, and the stupid things</span></li>
+      <li class="reason"><span class="n">41</span><span class="t">The way you handle all my stupidity</span></li>
+      <li class="reason"><span class="n">42</span><span class="t">You&#x27;re appreciative even when I haven&#x27;t given you a reason to be</span></li>
+      <li class="reason"><span class="n">43</span><span class="t">You go with the flow even though I&#x27;m a terrible planner</span></li>
+      <li class="reason"><span class="n">44</span><span class="t">You were patient when I lost the car for 20 minutes</span></li>
+      <li class="reason"><span class="n">45</span><span class="t">When I got sick in Dubai and you took care of me</span></li>
+      <li class="reason"><span class="n">46</span><span class="t">The way you push me about the gym with zero mercy</span></li>
+      <li class="reason"><span class="n">47</span><span class="t">When you tell me I&#x27;m disgusting for sweating</span></li>
+      <li class="reason"><span class="n">48</span><span class="t">You&#x27;re a beast at the gym</span></li>
+      <li class="reason"><span class="n">49</span><span class="t">The way you talk about your parents</span></li>
+      <li class="reason"><span class="n">50</span><span class="t">That you&#x27;re literally Moroccan royalty</span></li>
+      <li class="reason"><span class="n">51</span><span class="t">You buy things for your mom before you buy anything for yourself. Always</span></li>
+      <li class="reason"><span class="n">52</span><span class="t">Your brothers, and the way you worry about all of them at once</span></li>
+      <li class="reason"><span class="n">53</span><span class="t">Being Theo&#x27;s mom</span></li>
+      <li class="reason"><span class="n">54</span><span class="t">You love my mom</span></li>
+      <li class="reason"><span class="n">55</span><span class="t">My mom loves you</span></li>
+      <li class="reason"><span class="n">56</span><span class="t">How you blended into my life in Amman — my friends, my family, all of it</span></li>
+      <li class="reason"><span class="n">57</span><span class="t">How certain you are that you&#x27;re right with your friends. And how often you actually are</span></li>
+      <li class="reason"><span class="n">58</span><span class="t">You love Palestine</span></li>
+      <li class="reason"><span class="n">59</span><span class="t">Your rings and your jewellery, all in the same colour family</span></li>
+      <li class="reason"><span class="n">60</span><span class="t">When you send me mirror selfies of your outfit</span></li>
+      <li class="reason"><span class="n">61</span><span class="t">When you ask me what colour to do your nails</span></li>
+      <li class="reason"><span class="n">62</span><span class="t">Your love of flowers</span></li>
+      <li class="reason"><span class="n">63</span><span class="t">That you want a special wedding ring</span></li>
+      <li class="reason"><span class="n">64</span><span class="t">Shopping with you</span></li>
+      <li class="reason"><span class="n">65</span><span class="t">You appreciate the gifts I get you even when you think they&#x27;re stupid</span></li>
+      <li class="reason"><span class="n">66</span><span class="t">You know exactly what I like</span></li>
+      <li class="reason"><span class="n">67</span><span class="t">When you help me clean out my Instagram following</span></li>
+      <li class="reason"><span class="n">68</span><span class="t">When you send me a meme or a reel that&#x27;s really a message you want to send me</span></li>
+      <li class="reason"><span class="n">69</span><span class="t">The stickers we make every time we&#x27;re out</span></li>
+      <li class="reason"><span class="n">70</span><span class="t">Just hugging you</span></li>
+      <li class="reason"><span class="n">71</span><span class="t">Just kissing you</span></li>
+      <li class="reason"><span class="n">72</span><span class="t">Being close to you</span></li>
+      <li class="reason"><span class="n">73</span><span class="t">Sleeping next to you, even though I&#x27;m annoying and keep waking you up</span></li>
+      <li class="reason"><span class="n">74</span><span class="t">Sleeping in hotels with you</span></li>
+      <li class="reason"><span class="n">75</span><span class="t">Our endless mirror selfies</span></li>
+      <li class="reason"><span class="n">76</span><span class="t">Cuddling and watching stupid things together</span></li>
+      <li class="reason"><span class="n">77</span><span class="t">Having dinner with you, and then eating yours too</span></li>
+      <li class="reason"><span class="n">78</span><span class="t">Having drinks with you, back when you drank</span></li>
+      <li class="reason"><span class="n">79</span><span class="t">Dancing with you</span></li>
+      <li class="reason"><span class="n">80</span><span class="t">Driving with you</span></li>
+      <li class="reason"><span class="n">81</span><span class="t">You think I&#x27;m funny</span></li>
+      <li class="reason"><span class="n">82</span><span class="t">When you took edibles with me</span></li>
+      <li class="reason"><span class="n">83</span><span class="t">When you ask if I&#x27;ve met anyone, even though you know there&#x27;s no one</span></li>
+      <li class="reason"><span class="n">84</span><span class="t">Even your cranky days</span></li>
+      <li class="reason"><span class="n">85</span><span class="t">Our first date. Best one I&#x27;ve had</span></li>
+      <li class="reason"><span class="n">86</span><span class="t">When you were the only person who was nice to me in Marbella</span></li>
+      <li class="reason"><span class="n">87</span><span class="t">That you came to Marbella anyway, even when we were falling apart</span></li>
+      <li class="reason"><span class="n">88</span><span class="t">Walking the streets of New York with you</span></li>
+      <li class="reason"><span class="n">89</span><span class="t">Sitting in New York parks with you</span></li>
+      <li class="reason"><span class="n">90</span><span class="t">Our lunch breaks in NYC</span></li>
+      <li class="reason"><span class="n">91</span><span class="t">Cycling Manhattan with you</span></li>
+      <li class="reason"><span class="n">92</span><span class="t">Universal Studios with you</span></li>
+      <li class="reason"><span class="n">93</span><span class="t">Wadi Rum in the rain with you</span></li>
+      <li class="reason"><span class="n">94</span><span class="t">When you left your passport in Amman and we were already in Petra</span></li>
+      <li class="reason"><span class="n">95</span><span class="t">When you let me put in an OMI shift at the conference</span></li>
+      <li class="reason"><span class="n">96</span><span class="t">The Slimi collage t-shirt you made me</span></li>
+      <li class="reason"><span class="n">97</span><span class="t">Travelling with you. You&#x27;re the best travel partner I&#x27;ve had</span></li>
+      <li class="reason"><span class="n">98</span><span class="t">Your love for an adventure</span></li>
+      <li class="reason"><span class="n">99</span><span class="t">2026 was a hard year and you still made it easy</span></li>
+      <li class="reason"><span class="n">100</span><span class="t">You always come back, even when I fuck up. You&#x27;re better than me</span></li>
+  </ol>
+
+  <footer><span class="heart">&#129293;</span>Always.</footer>
+</div>
+
+<script>
+(function () {
+  var reasons = ["The way you walk into a room smiling. Even my grandma noticed", "Your eyes", "Your smile", "Your laugh. It could make anyone fall in love with you", "Your face with makeup", "Your face without makeup", "Your body in a bikini", "Your body with nothing on", "You were a very cute baby", "Your beautiful soul", "The way you switch between French, English and Arabic mid-sentence", "You stop speaking English when you're tired", "When you say “exact”", "When you say hihihi", "You always use 🤍", "When you tell me ily out of nowhere", "Your voice notes where you're laughing so hard I can't understand a word", "“I'm home,” sent every time so I'd stop wondering", "“My door is open in Paris”", "You sleep anywhere and everywhere — flights, subways, car rides, my lap", "Being in lalaland when we're walking together", "Your love for food and the fact that you never actually eat", "The food you make always looks incredible and I never once got to try it", "You forget to eat and forget to drink water and I have to remind you about both", "When you're starving after work", "You're a boss lady, and people trust you blindly", "You want a real career. You're ambitious. You never wanted to be a stay-at-home Pilates mom", "You're building a life in Paris when you don't have to. You could be at home with your parents and you chose not to be", "You're so good at work", "You're very intelligent, and I get your opinion on everything before I do it", "You listen to my startup ideas even though you think they're stupid", "You keep pushing me", "“I'm proud of you,” said about things that hadn't earned it yet", "Your support for every single interview I've done", "You're cultured, and curious about every culture that isn't your own", "You're specific about what you like. Nothing about you is basic", "You don't follow trends, you set them", "You're always there for me — fighting or not, whether you hate me that week or not", "Even when you're mad at me you still say goodnight", "You're so invested in my life. My problems, my wins, and the stupid things", "The way you handle all my stupidity", "You're appreciative even when I haven't given you a reason to be", "You go with the flow even though I'm a terrible planner", "You were patient when I lost the car for 20 minutes", "When I got sick in Dubai and you took care of me", "The way you push me about the gym with zero mercy", "When you tell me I'm disgusting for sweating", "You're a beast at the gym", "The way you talk about your parents", "That you're literally Moroccan royalty", "You buy things for your mom before you buy anything for yourself. Always", "Your brothers, and the way you worry about all of them at once", "Being Theo's mom", "You love my mom", "My mom loves you", "How you blended into my life in Amman — my friends, my family, all of it", "How certain you are that you're right with your friends. And how often you actually are", "You love Palestine", "Your rings and your jewellery, all in the same colour family", "When you send me mirror selfies of your outfit", "When you ask me what colour to do your nails", "Your love of flowers", "That you want a special wedding ring", "Shopping with you", "You appreciate the gifts I get you even when you think they're stupid", "You know exactly what I like", "When you help me clean out my Instagram following", "When you send me a meme or a reel that's really a message you want to send me", "The stickers we make every time we're out", "Just hugging you", "Just kissing you", "Being close to you", "Sleeping next to you, even though I'm annoying and keep waking you up", "Sleeping in hotels with you", "Our endless mirror selfies", "Cuddling and watching stupid things together", "Having dinner with you, and then eating yours too", "Having drinks with you, back when you drank", "Dancing with you", "Driving with you", "You think I'm funny", "When you took edibles with me", "When you ask if I've met anyone, even though you know there's no one", "Even your cranky days", "Our first date. Best one I've had", "When you were the only person who was nice to me in Marbella", "That you came to Marbella anyway, even when we were falling apart", "Walking the streets of New York with you", "Sitting in New York parks with you", "Our lunch breaks in NYC", "Cycling Manhattan with you", "Universal Studios with you", "Wadi Rum in the rain with you", "When you left your passport in Amman and we were already in Petra", "When you let me put in an OMI shift at the conference", "The Slimi collage t-shirt you made me", "Travelling with you. You're the best travel partner I've had", "Your love for an adventure", "2026 was a hard year and you still made it easy", "You always come back, even when I fuck up. You're better than me"];
+  var numEl = document.getElementById('dailyNum');
+  var txtEl = document.getElementById('dailyText');
+  var current = Math.floor(Date.now() / 86400000) % reasons.length;
+  function showReason(i) { numEl.textContent = i + 1; txtEl.textContent = reasons[i]; }
+  showReason(current);
+  document.getElementById('another').addEventListener('click', function () {
+    var next = current;
+    while (next === current) next = Math.floor(Math.random() * reasons.length);
+    current = next;
+    showReason(current);
+  });
+
+  var photos = [];
+  var img = document.getElementById('shot');
+  var btn = document.getElementById('newPhoto');
+  if (!img || !btn || photos.length < 2) { if (btn) btn.hidden = true; return; }
+
+  var shown = Math.floor(Math.random() * photos.length);
+  img.src = 'photos/' + photos[shown];
+
+  function preload(i) { var p = new Image(); p.src = 'photos/' + photos[i]; }
+  preload((shown + 1) % photos.length);
+
+  btn.addEventListener('click', function () {
+    var next = shown;
+    while (next === shown) next = Math.floor(Math.random() * photos.length);
+    shown = next;
+    var loader = new Image();
+    img.classList.add('fading');
+    loader.onload = loader.onerror = function () {
+      img.src = loader.src;
+      img.classList.remove('fading');
+      preload(Math.floor(Math.random() * photos.length));
+    };
+    loader.src = 'photos/' + photos[shown];
+  });
+})();
+</script>
+</body>
+</html>
