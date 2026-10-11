@@ -28,8 +28,7 @@ Edit `reasons.md` on github.com and commit. The page rebuilds.
 | `site/photos/` | The photos. Everything in here gets picked up. |
 | `build.py` | Generates `site/index.html` from those two. CI runs it. |
 | `site/index.html` | Generated. Don't edit; it gets overwritten each build. |
-| `.github/workflows/pages.yml` | Build and deploy to GitHub Pages. |
-| `Dockerfile`, `Caddyfile` | Railway deployment, if you ever want it. |
+| `Dockerfile`, `Caddyfile` | Railway build and deploy. Runs `build.py`. |
 
 ## Working locally instead
 
@@ -41,12 +40,12 @@ git add -A && git commit -m "photos" && git push
 
 ## Deploying
 
-**GitHub Pages** — Settings → Pages → Source: **GitHub Actions**. Free. Needs
-a public repo unless the account is on GitHub Pro.
+Live on Railway at https://site-production-ff11.up.railway.app — redeploys on
+every push to `main`. The Docker build shrinks the photos and runs `build.py`,
+so nothing needs running locally.
 
-**Railway** — New Project → Deploy from GitHub repo. Reads the `Dockerfile`,
-serves `site/` with Caddy on `$PORT`. Works with private repos. Costs money
-after the trial credit.
+A free GitHub Pages mirror is also possible (Settings → Pages → Source: GitHub
+Actions, plus a workflow file). Not set up.
 
 ## Custom domain
 
