@@ -18,6 +18,11 @@ START = "2023-07-17"  # the Spain trip
 
 # Password gate. Leave ANSWERS empty to turn the gate off entirely.
 # Matching ignores case, spaces, punctuation and a leading "the".
+# A link out to the song. Hosting the recording would be piracy; this sends
+# her to the real thing. Swap SONG_URL for a direct link any time.
+SONG_LABEL = "Hey There Delilah"
+SONG_URL = "https://www.youtube.com/results?search_query=plain+white+t%27s+hey+there+delilah"
+
 HINT = "Which restaurant in New York did we have our first date at?"
 ANSWERS = ["Wayan", "Wayan NYC", "Wayan New York", "Wayan Nolita", "Wayan restaurant"]
 
@@ -99,6 +104,13 @@ h1{font-family:var(--display);font-weight:400;font-size:clamp(46px,13vw,104px);
 h1 .it{font-style:italic;display:block;color:var(--brass)}
 .since{margin:18px 0 0;font-size:13.5px;color:var(--dim);
   font-variant-numeric:tabular-nums}
+.tune{margin:14px 0 0}
+.tune a{display:inline-flex;align-items:center;gap:9px;color:var(--brass);
+  text-decoration:none;font-size:13.5px;letter-spacing:.02em;
+  border-bottom:1px solid rgba(199,167,95,.3);padding-bottom:2px;
+  transition:border-color .18s}
+.tune a:hover{border-bottom-color:var(--brass)}
+.tune .note{font-size:15px;line-height:1}
 
 /* ---- the book ---- */
 .book{max-width:820px;margin:0 auto;padding:clamp(44px,8vw,80px) 24px;perspective:2000px}
@@ -231,6 +243,8 @@ body.locked{overflow:hidden}
     <p class="kicker">For Selma</p>
     <h1>One hundred<span class="it">reasons</span></h1>
     <p class="since" id="since"></p>
+    <p class="tune"><a href="__SONG_URL__" target="_blank" rel="noopener noreferrer">
+      <span class="note">&#9834;</span> Put this on first &mdash; __SONG_LABEL__</a></p>
   </div>
 </header>
 
@@ -435,6 +449,8 @@ out = (
     .replace("__PHOTOS__", json.dumps(photos, ensure_ascii=False))
     .replace("__START__", START)
     .replace("__HINT__", html.escape(HINT))
+    .replace("__SONG_LABEL__", html.escape(SONG_LABEL))
+    .replace("__SONG_URL__", html.escape(SONG_URL))
     .replace("__ANSWERS__", json.dumps(ANSWERS))
     .replace("__FIRST__", html.escape(reasons[0]))
 )
