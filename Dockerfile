@@ -1,8 +1,7 @@
 # Build stage: normalise iPhone HEIC, shrink everything, regenerate the page.
 # This is what makes "upload photos on github.com" enough on its own.
 FROM python:3.12-alpine AS build
-RUN apk add --no-cache imagemagick imagemagick-heic imagemagick-jpeg \
-                       imagemagick-png imagemagick-webp
+RUN apk add --no-cache imagemagick imagemagick-heic imagemagick-jpeg imagemagick-webp
 WORKDIR /app
 COPY . .
 RUN set -e; \
