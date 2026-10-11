@@ -30,7 +30,7 @@ SONG_BY = "Plain White T's"
 # (label, lat, lon, which side the label sits on)
 HOMES = [
     ("Selma \u2014 Paris", 48.8566, 2.3522, "left"),
-    ("Sufyan \u2014 Amman", 31.9454, 35.9284, "right"),
+    ("Sufyan \u2014 Amman", 31.9454, 35.9284, "above"),
 ]
 PLACES = [
     ("Marbella", 36.5101, -4.8824, "left"),
@@ -130,9 +130,10 @@ LETTERS = [
 ]
 
 # --- The dog. ---
-THEO = ("Theo",
-        "Born in M\u00e1laga, flown to Amman through Istanbul, and yours from "
-        "the first photo. You still asked how he was months after everything.")
+THEO = ("You're Theo's mama",
+        "Born in M\u00e1laga, flown to Amman through Istanbul, and yours from the "
+        "very first photo. You still asked how he was months after everything else "
+        "had gone quiet. He misses you.")
 
 # What each part of her is for. (x, y on a 400x760 canvas, name, meaning)
 PARTS = [
@@ -363,7 +364,7 @@ TEMPLATE = r"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>One Hundred Reasons</title>
+<title>Slimi</title>
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#131110">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -540,6 +541,7 @@ h1 .it{font-style:italic;display:block;color:var(--brass)}
 .pin.left{transform:translate(calc(-100% - 13px),-50%)}
 .pin.right{transform:translate(13px,-50%)}
 .pin.below{transform:translate(-50%,16px)}
+.pin.above{transform:translate(-50%,calc(-100% - 14px))}
 .pin.gap{color:var(--brass);font-family:var(--display);
   font-size:clamp(15px,2.8vw,26px);transform:translate(-50%,-50%);
   font-variant-numeric:tabular-nums;text-shadow:0 1px 10px #0E0C0B}
@@ -651,15 +653,18 @@ h1 .it{font-style:italic;display:block;color:var(--brass)}
   color:var(--ink);max-width:54ch}
 
 /* ---- theo ---- */
-.theo{max-width:960px;margin:0 auto;padding:0 24px clamp(46px,7.5vw,80px);
-  display:flex;align-items:center;gap:clamp(22px,5vw,46px);flex-wrap:wrap}
-.film{margin:0;flex:0 0 auto;width:clamp(200px,42vw,300px);
+.theo{max-width:1120px;margin:0 auto;padding:0 24px clamp(46px,7.5vw,80px)}
+.theowrap{display:flex;align-items:center;justify-content:center;
+  gap:clamp(24px,5vw,52px);flex-wrap:wrap;
+  border:1px solid var(--rule);border-radius:4px;background:#0C0B0A;
+  padding:clamp(24px,4vw,44px)}
+.film{margin:0;flex:0 0 auto;width:clamp(190px,34vw,250px);
   border:1px solid var(--rule);border-radius:6px;overflow:hidden;
   background:#000;box-shadow:var(--shadow)}
 .film video{display:block;width:100%;height:auto}
 .paw{display:block;width:34px;color:var(--brass);margin-bottom:10px}
 .paw svg{width:100%;height:auto;display:block}
-.pupsay{flex:1 1 260px;min-width:0}
+.pupsay{flex:1 1 280px;min-width:0;max-width:42ch}
 .pupsay h2{font-family:var(--display);font-weight:400;font-style:italic;
   font-size:clamp(24px,4.4vw,34px);margin:0 0 6px}
 .pupsay p{margin:0;color:var(--dim);font-size:14.5px;line-height:1.55;max-width:46ch}
@@ -706,7 +711,7 @@ body.locked{overflow:hidden}
 
 <div class="title">
   <p class="kicker">For Selma</p>
-  <h1>One hundred<span class="it">reasons</span></h1>
+  <h1>Reasons<span class="it">why I love you</span></h1>
   <p class="since" id="since"></p>
 </div>
 
@@ -752,7 +757,7 @@ body.locked{overflow:hidden}
 
 <section class="index">
   <details id="allOfThem">
-    <summary><h2>All of them</h2><span class="meta">100</span></summary>
+    <summary><h2>All of them</h2><span class="meta">__COUNT__</span></summary>
     <div class="panel">
       <ol>
 __ROWS__
@@ -817,6 +822,7 @@ __LETTERS__
 </section>
 
 <section class="theo">
+  <div class="theowrap">
   <figure class="film">
     <video id="theoFilm" src="media/theo.mp4" poster="media/theo.jpg"
            preload="none" playsinline controls loop></video>
@@ -834,6 +840,7 @@ __LETTERS__
     </span>
     <h2>__THEO_NAME__</h2>
     <p>__THEO_WHY__</p>
+  </div>
   </div>
 </section>
 
@@ -1137,6 +1144,7 @@ out = (
     .replace("__THEO_NAME__", html.escape(THEO[0]))
     .replace("__THEO_WHY__", html.escape(THEO[1]))
     .replace("__ANSWERS__", json.dumps(ANSWERS))
+    .replace("__COUNT__", str(len(reasons)))
     .replace("__FIRST__", html.escape(reasons[0]))
 )
 (SITE / "index.html").write_text(out, "utf-8")

@@ -100,3 +100,4 @@
 98. Your love for an adventure
 99. 2026 was a hard year and you still made it easy
 100. You always come back, even when I fuck up. You're better than me
+101. There is no number that finishes this. I just stopped writing.
